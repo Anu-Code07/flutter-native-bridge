@@ -19,7 +19,8 @@ final class BridgeEventStreamRegistry {
   final BridgeCodec _codec;
   final BridgeSerializerRegistry _serializers;
   final BinaryMessenger? _binaryMessenger;
-  final Map<String, Stream<Object?>> _sharedStreams = <String, Stream<Object?>>{};
+  final Map<String, Stream<Object?>> _sharedStreams =
+      <String, Stream<Object?>>{};
 
   Stream<T> stream<T>(
     String eventName, {
@@ -44,11 +45,9 @@ final class BridgeEventStreamRegistry {
       return channel.receiveBroadcastStream().asBroadcastStream();
     });
 
-    return source
-        .map<T>((event) {
-          return _serializers.deserializeValue<T>(_codec.decode<Object?>(event));
-        })
-        .handleError((Object error, StackTrace stackTrace) {
+    return source.map<T>((event) {
+      return _serializers.deserializeValue<T>(_codec.decode<Object?>(event));
+    }).handleError((Object error, StackTrace stackTrace) {
       if (error is PlatformException) {
         throw BridgePlatformException(
           error.message ?? 'Native event stream failed.',

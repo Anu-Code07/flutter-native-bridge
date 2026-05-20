@@ -19,11 +19,11 @@ scripts:
 
   format:
     description: Format Dart sources.
-    run: melos exec -- "dart format --set-exit-if-changed lib test example"
+    run: melos exec -- "dart format --set-exit-if-changed ."
 
   generate:
     description: Run build_runner in packages that use code generation.
-    run: melos exec --depends-on=build_runner -- "dart run build_runner build --delete-conflicting-outputs"
+    run: melos exec --depends-on=build_runner -- "dart run build_runner build"
 
   native:check:
     description: Validate native source layout is present for all plugin packages.

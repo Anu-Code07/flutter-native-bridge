@@ -11,10 +11,22 @@ import 'native_contract_emitters.dart';
 
 /// Generates Dart bridge clients and machine-readable contract descriptors.
 final class BridgeContractGenerator extends Generator {
-  static const TypeChecker _bridgeChecker = TypeChecker.fromRuntime(Bridge);
-  static const TypeChecker _ffiBridgeChecker = TypeChecker.fromRuntime(FFIBridge);
-  static const TypeChecker _eventChecker = TypeChecker.fromRuntime(BridgeEvent);
-  static const TypeChecker _methodChecker = TypeChecker.fromRuntime(BridgeMethod);
+  static const TypeChecker _bridgeChecker = TypeChecker.typeNamed(
+    Bridge,
+    inPackage: 'nativeflow_bridge_annotations',
+  );
+  static const TypeChecker _ffiBridgeChecker = TypeChecker.typeNamed(
+    FFIBridge,
+    inPackage: 'nativeflow_bridge_annotations',
+  );
+  static const TypeChecker _eventChecker = TypeChecker.typeNamed(
+    BridgeEvent,
+    inPackage: 'nativeflow_bridge_annotations',
+  );
+  static const TypeChecker _methodChecker = TypeChecker.typeNamed(
+    BridgeMethod,
+    inPackage: 'nativeflow_bridge_annotations',
+  );
 
   const BridgeContractGenerator();
 
@@ -37,7 +49,14 @@ final class BridgeContractGenerator extends Generator {
       }
     }
 
-    return output.toString();
+    if (output.isEmpty) {
+      return '';
+    }
+    return '''
+// ignore_for_file: unused_element
+
+$output
+''';
   }
 
   BridgeContract _readBridgeContract(
@@ -52,8 +71,9 @@ final class BridgeContractGenerator extends Generator {
     }
 
     final reader = ConstantReader(annotation);
+    final className = element.name ?? 'AnonymousBridge';
     final channel = reader.read('channel').literalValue as String? ??
-        _defaultChannelName(element.name);
+        _defaultChannelName(className);
     final version = reader.read('version').intValue;
     final operations = element.methods
         .where((method) => !method.isStatic && method.isAbstract)
@@ -61,7 +81,7 @@ final class BridgeContractGenerator extends Generator {
         .toList();
 
     return BridgeContract(
-      name: element.name,
+      name: className,
       channel: channel,
       version: version,
       methods: operations.where((operation) => !operation.isStream).toList(),
@@ -75,23 +95,25 @@ final class BridgeContractGenerator extends Generator {
     final methodAnnotation = _methodChecker.firstAnnotationOf(method);
     final operationName = _readNameOverride(eventAnnotation) ??
         _readNameOverride(methodAnnotation) ??
-        method.name;
+        method.name ??
+        'anonymousMethod';
 
     return BridgeOperation(
       name: operationName,
       returnType: returnType,
       isStream: _isStream(method.returnType),
       timeoutMilliseconds: _readTimeoutMilliseconds(methodAnnotation),
-      parameters: method.parameters.map(_readParameter).toList(),
+      parameters: method.formalParameters.map(_readParameter).toList(),
     );
   }
 
-  BridgeParameter _readParameter(ParameterElement parameter) {
+  BridgeParameter _readParameter(FormalParameterElement parameter) {
     return BridgeParameter(
-      name: parameter.name,
+      name: parameter.name ?? 'argument',
       type: _typeName(parameter.type),
       isRequired: parameter.isRequiredNamed || parameter.isRequiredPositional,
-      isNullable: parameter.type.nullabilitySuffix == NullabilitySuffix.question,
+      isNullable:
+          parameter.type.nullabilitySuffix == NullabilitySuffix.question,
     );
   }
 
@@ -109,7 +131,6 @@ final class BridgeContractGenerator extends Generator {
         ..writeln('    BridgeMethodDescriptor(')
         ..writeln("      name: '${method.name}',")
         ..writeln("      returnType: '${method.returnType}',")
-        ..writeln('      transport: BridgeTransport.methodChannel,')
         ..writeln('      timeoutMilliseconds: ${method.timeoutMilliseconds},')
         ..writeln('      parameters: <BridgeParameterDescriptor>[');
       for (final parameter in method.parameters) {
@@ -134,7 +155,9 @@ final class BridgeContractGenerator extends Generator {
       buffer
         ..writeln('    BridgeEventDescriptor(')
         ..writeln("      name: '${event.name}',")
-        ..writeln("      payloadType: '${_streamPayloadType(event.returnType)}',")
+        ..writeln(
+          "      payloadType: '${_streamPayloadType(event.returnType)}',",
+        )
         ..writeln('    ),');
     }
 
@@ -225,10 +248,11 @@ $swift
     final reader = ConstantReader(annotation);
     final library = reader.read('library').literalValue as String?;
     final symbolPrefix = reader.read('symbolPrefix').literalValue as String?;
-    final descriptorName = r'_$' '${element.name}FfiDescriptor';
+    final className = element.name ?? 'AnonymousFfiBridge';
+    final descriptorName = r'_$' '${className}FfiDescriptor';
     return '''
 const Map<String, Object?> $descriptorName = <String, Object?>{
-  'name': '${element.name}',
+  'name': '$className',
   'library': ${_literalString(library)},
   'symbolPrefix': ${_literalString(symbolPrefix)},
 };
@@ -250,7 +274,7 @@ const Map<String, Object?> $descriptorName = <String, Object?>{
   }
 
   String _typeName(DartType type) {
-    return type.getDisplayString(withNullability: true);
+    return type.getDisplayString();
   }
 
   bool _isStream(DartType type) {

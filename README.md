@@ -87,9 +87,9 @@ The packages intentionally separate compile-time APIs from runtime behavior:
 ```bash
 dart pub global activate melos
 melos bootstrap
-melos analyze
-melos test
-melos format
+melos run analyze
+melos run test
+melos run format
 ```
 
 > This repository currently requires a Flutter/Dart SDK on the machine running

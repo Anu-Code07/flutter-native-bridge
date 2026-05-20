@@ -40,18 +40,6 @@ final class NativeLibrary {
 
   final DynamicLibrary _library;
 
-  DartFunction lookupFunction<NativeFunction extends Function, DartFunction>(
-    String symbol,
-  ) {
-    try {
-      return _library.lookupFunction<NativeFunction, DartFunction>(symbol);
-    } on Object catch (error, stackTrace) {
-      throw BridgeRegistrationException(
-        'Native symbol "$symbol" was not found: $error\n$stackTrace',
-      );
-    }
-  }
-
   Pointer<T> lookupPointer<T extends NativeType>(String symbol) {
     try {
       return _library.lookup<T>(symbol);

@@ -14,7 +14,9 @@ final class KotlinContractEmitter {
 
     for (final method in contract.methods) {
       final parameters = method.parameters
-          .map((parameter) => '${parameter.name}: ${_kotlinType(parameter.type)}')
+          .map(
+            (parameter) => '${parameter.name}: ${_kotlinType(parameter.type)}',
+          )
           .join(', ');
       buffer.writeln(
         '  suspend fun ${method.name}($parameters): ${_kotlinType(method.returnType)}',
@@ -55,7 +57,9 @@ final class SwiftContractEmitter {
 
     for (final method in contract.methods) {
       final parameters = method.parameters
-          .map((parameter) => '${parameter.name}: ${_swiftType(parameter.type)}')
+          .map(
+            (parameter) => '${parameter.name}: ${_swiftType(parameter.type)}',
+          )
           .join(', ');
       buffer.writeln(
         '  func ${method.name}($parameters) async throws -> ${_swiftType(method.returnType)}',

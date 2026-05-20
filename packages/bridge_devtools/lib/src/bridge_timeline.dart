@@ -33,7 +33,8 @@ final class BridgeTimeline {
   final int capacity;
   final List<BridgeTimelineEvent> _events = <BridgeTimelineEvent>[];
 
-  List<BridgeTimelineEvent> get events => List<BridgeTimelineEvent>.unmodifiable(
+  List<BridgeTimelineEvent> get events =>
+      List<BridgeTimelineEvent>.unmodifiable(
         _events,
       );
 

@@ -9,13 +9,13 @@ final class NativeMemoryScope {
   final List<Pointer<NativeType>> _allocations = <Pointer<NativeType>>[];
 
   Pointer<Uint8> bytes(Uint8List value) {
-    final pointer = allocate<Uint8>(value.length);
+    final pointer = allocateBytes(value.length);
     pointer.asTypedList(value.length).setAll(0, value);
     return pointer;
   }
 
-  Pointer<T> allocate<T extends NativeType>(int count) {
-    final pointer = _allocator<T>(count);
+  Pointer<Uint8> allocateBytes(int count) {
+    final pointer = _allocator<Uint8>(count);
     _allocations.add(pointer.cast<NativeType>());
     return pointer;
   }

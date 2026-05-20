@@ -20,5 +20,27 @@ workspace:
   - examples/payment_sdk_wrapper
   - examples/ai_image_processor
 
+melos:
+  scripts:
+    analyze:
+      description: Analyze every Dart package.
+      run: melos exec -- "dart analyze ."
+
+    test:
+      description: Run package tests.
+      run: melos exec --dir-exists=test -- "dart test"
+
+    format:
+      description: Format Dart sources.
+      run: melos exec -- "dart format --set-exit-if-changed ."
+
+    generate:
+      description: Run build_runner in packages that use code generation.
+      run: melos exec --depends-on=build_runner -- "dart run build_runner build"
+
+    native:check:
+      description: Validate native source layout is present for all plugin packages.
+      run: melos exec --scope="nativeflow_bridge_*" -- "test -d lib"
+
 dev_dependencies:
   melos: ^7.7.0

@@ -49,7 +49,8 @@ final class BridgeMethodDescriptor {
         'returnType': returnType,
         'transport': transport.name,
         'timeoutMilliseconds': timeoutMilliseconds,
-        'parameters': parameters.map((parameter) => parameter.toJson()).toList(),
+        'parameters':
+            parameters.map((parameter) => parameter.toJson()).toList(),
       };
 }
 

@@ -20,9 +20,9 @@ jobs:
       - name: Bootstrap
         run: melos bootstrap
       - name: Analyze
-        run: melos analyze
+        run: melos run analyze
       - name: Test
-        run: melos test
+        run: melos run test
 
   flutter:
     name: Flutter runtime packages
@@ -52,4 +52,4 @@ jobs:
       - name: Bootstrap
         run: melos bootstrap
       - name: Run generator
-        run: melos generate
+        run: melos run generate

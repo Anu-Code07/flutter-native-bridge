@@ -6,7 +6,8 @@ final class BridgeRegistry {
 
   static final BridgeRegistry instance = BridgeRegistry._();
 
-  final Map<String, BridgeDescriptor> _descriptors = <String, BridgeDescriptor>{};
+  final Map<String, BridgeDescriptor> _descriptors =
+      <String, BridgeDescriptor>{};
   final Map<String, Object> _plugins = <String, Object>{};
 
   Iterable<BridgeDescriptor> get descriptors => _descriptors.values;

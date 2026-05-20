@@ -40,7 +40,7 @@ final class BridgeClient {
         _eventStreams = BridgeEventStreamRegistry(
           descriptor: descriptor,
           codec: codec,
-          serializers: _serializers,
+          serializers: serializers,
           binaryMessenger: binaryMessenger,
         );
 
