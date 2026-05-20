@@ -1,12 +1,21 @@
 name: nativeflow_bridge_core
-description: Transport-neutral descriptors, serialization contracts, and typed errors for NativeFlow Bridge.
+description: Transport-neutral descriptors, serialization contracts, codecs, and typed errors for NativeFlow Bridge.
 version: 0.1.0
-repository: https://github.com/nativeflow/nativeflow_bridge
+homepage: https://github.com/Anu-Code07/flutter-native-bridge
+repository: https://github.com/Anu-Code07/flutter-native-bridge
+issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
+documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 resolution: workspace
+
+topics:
+  - flutter
+  - native
+  - bridge
+  - codec
 
 dependencies:
   meta: ^1.16.0

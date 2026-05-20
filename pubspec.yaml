@@ -1,9 +1,12 @@
 name: nativeflow_bridge_workspace
 description: Workspace tooling for the NativeFlow Bridge monorepo.
 publish_to: none
+homepage: https://github.com/Anu-Code07/flutter-native-bridge
+repository: https://github.com/Anu-Code07/flutter-native-bridge
+issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 workspace:
   - packages/bridge_annotations

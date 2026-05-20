@@ -1,13 +1,22 @@
 name: nativeflow_bridge_devtools
-description: DevTools integration foundation for inspecting NativeFlow Bridge traffic.
+description: Flutter DevTools integration foundation for inspecting NativeFlow Bridge traffic and timelines.
 version: 0.1.0
-repository: https://github.com/nativeflow/nativeflow_bridge
+homepage: https://github.com/Anu-Code07/flutter-native-bridge
+repository: https://github.com/Anu-Code07/flutter-native-bridge
+issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
+documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.22.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
 
 resolution: workspace
+
+topics:
+  - flutter
+  - devtools
+  - native
+  - bridge
 
 dependencies:
   flutter:

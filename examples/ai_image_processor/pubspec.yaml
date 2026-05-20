@@ -3,7 +3,7 @@ description: Example FFI image processor bridge built with NativeFlow Bridge.
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 resolution: workspace
 

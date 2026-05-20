@@ -4,6 +4,9 @@ NativeFlow Bridge is a modular Flutter-native interoperability framework for
 building type-safe, generated bridges between Dart and Android, iOS, macOS,
 Windows, Linux, and FFI-based native runtimes.
 
+Maintained by Anurag at
+[Anu-Code07/flutter-native-bridge](https://github.com/Anu-Code07/flutter-native-bridge).
+
 It is designed as a modern replacement for hand-written `MethodChannel`,
 `EventChannel`, and `BasicMessageChannel` boilerplate:
 
@@ -92,9 +95,11 @@ melos run test
 melos run format
 ```
 
-> This repository currently requires a Flutter/Dart SDK on the machine running
-> the commands. The Cursor Cloud image used to create this scaffold did not have
-> Dart or Flutter preinstalled.
+> This repository requires a Flutter/Dart SDK on the machine running the
+> commands.
+
+See [PUBLISHING.md](PUBLISHING.md) for pub.dev dry-run commands and package
+publish order.
 
 ## Status
 
