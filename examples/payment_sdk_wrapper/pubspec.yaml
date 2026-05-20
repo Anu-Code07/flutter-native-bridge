@@ -3,17 +3,15 @@ description: Example payment SDK wrapper built with NativeFlow Bridge.
 publish_to: none
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
+
+resolution: workspace
 
 dependencies:
-  nativeflow_bridge_annotations:
-    path: ../../packages/bridge_annotations
-  nativeflow_bridge_core:
-    path: ../../packages/bridge_core
-  nativeflow_bridge_runtime:
-    path: ../../packages/bridge_runtime
+  nativeflow_bridge_annotations: ^0.1.0
+  nativeflow_bridge_core: ^0.1.0
+  nativeflow_bridge_runtime: ^0.1.0
 
 dev_dependencies:
   build_runner: ^2.4.15
-  nativeflow_bridge_generator:
-    path: ../../packages/bridge_generator
+  nativeflow_bridge_generator: ^0.1.0

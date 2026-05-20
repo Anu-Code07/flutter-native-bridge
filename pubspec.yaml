@@ -3,7 +3,22 @@ description: Workspace tooling for the NativeFlow Bridge monorepo.
 publish_to: none
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
+
+workspace:
+  - packages/bridge_annotations
+  - packages/bridge_core
+  - packages/bridge_generator
+  - packages/bridge_runtime
+  - packages/bridge_android
+  - packages/bridge_ios
+  - packages/bridge_macos
+  - packages/bridge_windows
+  - packages/bridge_linux
+  - packages/bridge_ffi
+  - packages/bridge_devtools
+  - examples/payment_sdk_wrapper
+  - examples/ai_image_processor
 
 dev_dependencies:
-  melos: ^6.3.3
+  melos: ^7.7.0

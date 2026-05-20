@@ -4,14 +4,15 @@ version: 0.1.0
 repository: https://github.com/nativeflow/nativeflow_bridge
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
   flutter: ">=3.22.0"
+
+resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  nativeflow_bridge_core:
-    path: ../bridge_core
+  nativeflow_bridge_core: ^0.1.0
 
 dev_dependencies:
   flutter_test:
