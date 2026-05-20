@@ -1,0 +1,21 @@
+name: nativeflow_bridge_android
+description: Android Kotlin runtime shell for generated NativeFlow Bridge plugins.
+version: 0.1.0
+repository: https://github.com/nativeflow/nativeflow_bridge
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  nativeflow_bridge_runtime:
+    path: ../bridge_runtime
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: nativeflow.bridge.android
+        pluginClass: NativeFlowBridgePlugin

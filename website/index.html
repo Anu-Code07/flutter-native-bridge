@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NativeFlow Bridge</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="nav">
+        <strong>NativeFlow</strong>
+        <a href="../docs/architecture.md">Architecture</a>
+        <a href="../docs/code_generation.md">Generator</a>
+        <a href="../docs/ffi.md">FFI</a>
+      </nav>
+
+      <section class="hero">
+        <p class="eyebrow">Flutter native interoperability SDK</p>
+        <h1>Type-safe native bridges without channel boilerplate.</h1>
+        <p class="lede">
+          Define Dart contracts once. Generate Dart clients, native contracts,
+          serializers, event streams, and typed error surfaces for every
+          platform Flutter supports.
+        </p>
+        <pre><code>@Bridge(channel: 'payments')
+abstract class PaymentBridge {
+  Future&lt;PaymentResult&gt; pay(PaymentRequest request);
+  Stream&lt;PaymentEvent&gt; events();
+}</code></pre>
+      </section>
+
+      <section class="grid">
+        <article>
+          <h2>Generated APIs</h2>
+          <p>Compile-time descriptors and proxies remove fragile stringly typed
+          MethodChannel code.</p>
+        </article>
+        <article>
+          <h2>Realtime streams</h2>
+          <p>EventChannel multiplexing supports cancellation, buffering, and
+          DevTools inspection.</p>
+        </article>
+        <article>
+          <h2>Native runtimes</h2>
+          <p>Kotlin, Swift, C++, and FFI packages provide platform-specific
+          registration points.</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

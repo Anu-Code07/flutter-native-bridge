@@ -1,0 +1,55 @@
+name: NativeFlow Bridge CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  dart:
+    name: Dart packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Install Melos
+        run: dart pub global activate melos
+      - name: Bootstrap
+        run: melos bootstrap
+      - name: Analyze
+        run: melos analyze
+      - name: Test
+        run: melos test
+
+  flutter:
+    name: Flutter runtime packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install Melos
+        run: dart pub global activate melos
+      - name: Bootstrap
+        run: melos bootstrap
+      - name: Flutter analyze
+        run: melos exec --depends-on=flutter -- "flutter analyze"
+
+  generator-check:
+    name: Code generation contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Install Melos
+        run: dart pub global activate melos
+      - name: Bootstrap
+        run: melos bootstrap
+      - name: Run generator
+        run: melos generate

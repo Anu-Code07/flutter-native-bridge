@@ -1,0 +1,30 @@
+name: nativeflow_bridge
+
+packages:
+  - packages/**
+  - examples/**
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    description: Analyze every Dart package.
+    run: melos exec -- "dart analyze ."
+
+  test:
+    description: Run package tests.
+    run: melos exec --dir-exists=test -- "dart test"
+
+  format:
+    description: Format Dart sources.
+    run: melos exec -- "dart format --set-exit-if-changed lib test example"
+
+  generate:
+    description: Run build_runner in packages that use code generation.
+    run: melos exec --depends-on=build_runner -- "dart run build_runner build --delete-conflicting-outputs"
+
+  native:check:
+    description: Validate native source layout is present for all plugin packages.
+    run: melos exec --scope="nativeflow_bridge_*" -- "test -d lib"

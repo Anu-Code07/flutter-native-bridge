@@ -1,0 +1,14 @@
+name: nativeflow_bridge_ffi
+description: Dart FFI runtime primitives for NativeFlow Bridge native libraries.
+version: 0.1.0
+repository: https://github.com/nativeflow/nativeflow_bridge
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  nativeflow_bridge_core:
+    path: ../bridge_core
+
+dev_dependencies:
+  test: ^1.25.15

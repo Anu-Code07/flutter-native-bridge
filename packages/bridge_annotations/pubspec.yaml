@@ -1,0 +1,13 @@
+name: nativeflow_bridge_annotations
+description: Compile-time annotations for NativeFlow Bridge APIs and FFI bindings.
+version: 0.1.0
+repository: https://github.com/nativeflow/nativeflow_bridge
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+topics:
+  - flutter
+  - bridge
+  - codegen
+  - native

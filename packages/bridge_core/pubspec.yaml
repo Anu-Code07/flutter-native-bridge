@@ -1,0 +1,13 @@
+name: nativeflow_bridge_core
+description: Transport-neutral descriptors, serialization contracts, and typed errors for NativeFlow Bridge.
+version: 0.1.0
+repository: https://github.com/nativeflow/nativeflow_bridge
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  meta: ^1.16.0
+
+dev_dependencies:
+  test: ^1.25.15
