@@ -34,6 +34,7 @@ The generator and runtime produce:
 
 ```text
 packages/
+  nativeflow_bridge/    Public umbrella package exported from one import.
   bridge_annotations/  Public annotations consumed by source_gen.
   bridge_core/         Shared descriptors, codecs, exceptions, and serializers.
   bridge_generator/    build_runner/source_gen code-generation engine.
@@ -72,8 +73,16 @@ flowchart LR
 
 ## Packages
 
+Use `nativeflow_bridge` as the single public package import:
+
+```dart
+import 'package:nativeflow_bridge/nativeflow_bridge.dart';
+```
+
 The packages intentionally separate compile-time APIs from runtime behavior:
 
+- `nativeflow_bridge` is the public umbrella package published for consumers.
+  It re-exports the workspace packages from one library entrypoint.
 - `nativeflow_bridge_annotations` has no Flutter dependency and is safe for
   domain packages.
 - `nativeflow_bridge_generator` depends on `analyzer`, `build`, and

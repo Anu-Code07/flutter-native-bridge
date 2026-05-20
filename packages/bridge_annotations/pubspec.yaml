@@ -5,6 +5,7 @@ homepage: https://github.com/Anu-Code07/flutter-native-bridge
 repository: https://github.com/Anu-Code07/flutter-native-bridge
 issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
 documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
+author: Anurag
 
 environment:
   sdk: ">=3.6.0 <4.0.0"

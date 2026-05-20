@@ -1,9 +1,23 @@
 # Publishing
 
-NativeFlow Bridge is a pub workspace. Publish packages from their package
-directories, not from the workspace root.
+NativeFlow Bridge is a pub workspace with a single public umbrella package:
+`nativeflow_bridge`. Publish packages from their package directories, not from
+the workspace root.
 
-Run a dry run before publishing each package:
+Run a dry run before publishing the public package:
+
+```bash
+dart pub -C packages/nativeflow_bridge publish --dry-run
+```
+
+The umbrella package exposes one import for consumers:
+
+```dart
+import 'package:nativeflow_bridge/nativeflow_bridge.dart';
+```
+
+The internal workspace packages remain publishable implementation packages. Run
+dry runs for them only when publishing or validating those package boundaries:
 
 ```bash
 dart pub -C packages/bridge_annotations publish --dry-run
@@ -19,7 +33,7 @@ dart pub -C packages/bridge_ffi publish --dry-run
 dart pub -C packages/bridge_devtools publish --dry-run
 ```
 
-Publish packages in dependency order:
+If publishing every workspace package, publish them in dependency order:
 
 1. `nativeflow_bridge_annotations`
 2. `nativeflow_bridge_core`
@@ -32,6 +46,7 @@ Publish packages in dependency order:
 9. `nativeflow_bridge_windows`
 10. `nativeflow_bridge_linux`
 11. `nativeflow_bridge_devtools`
+12. `nativeflow_bridge`
 
-Pub.dev no longer displays `author` or `authors` pubspec fields. Attribution is
-kept in the license, package READMEs, and CocoaPods metadata.
+Author attribution is Anurag in the public package metadata, license, package
+READMEs, and CocoaPods metadata.
