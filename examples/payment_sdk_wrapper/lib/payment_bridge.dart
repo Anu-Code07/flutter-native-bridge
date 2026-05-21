@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:nativeflow_bridge_annotations/bridge_annotations.dart';
-import 'package:nativeflow_bridge_core/bridge_core.dart';
-import 'package:nativeflow_bridge_runtime/bridge_runtime.dart';
+import 'package:nativeflow_bridge/nativeflow_bridge.dart';
 
 part 'payment_bridge.g.dart';
 

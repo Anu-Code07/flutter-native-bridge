@@ -1,11 +1,7 @@
 name: nativeflow_bridge_android
-description: Android Kotlin runtime shell for generated NativeFlow Bridge Flutter plugins and bridges.
+description: Monorepo shim — platform plugin is in package:nativeflow_bridge.
+publish_to: none
 version: 0.1.0
-homepage: https://github.com/Anu-Code07/flutter-native-bridge
-repository: https://github.com/Anu-Code07/flutter-native-bridge
-issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
-documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
-author: Anurag
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -13,20 +9,6 @@ environment:
 
 resolution: workspace
 
-topics:
-  - flutter
-  - android
-  - native
-  - bridge
-
 dependencies:
-  flutter:
-    sdk: flutter
-  nativeflow_bridge_runtime: ^0.1.0
-
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: nativeflow.bridge.android
-        pluginClass: NativeFlowBridgePlugin
+  nativeflow_bridge:
+    path: ../nativeflow_bridge

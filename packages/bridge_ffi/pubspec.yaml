@@ -1,25 +1,13 @@
 name: nativeflow_bridge_ffi
-description: Dart FFI runtime primitives for NativeFlow Bridge native libraries and generated bindings.
+description: Monorepo shim — use package:nativeflow_bridge/ffi.dart on pub.dev.
+publish_to: none
 version: 0.1.0
-homepage: https://github.com/Anu-Code07/flutter-native-bridge
-repository: https://github.com/Anu-Code07/flutter-native-bridge
-issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
-documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
-author: Anurag
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
 
 resolution: workspace
 
-topics:
-  - ffi
-  - native
-  - bridge
-  - runtime
-
 dependencies:
-  nativeflow_bridge_core: ^0.1.0
-
-dev_dependencies:
-  test: ^1.25.15
+  nativeflow_bridge:
+    path: ../nativeflow_bridge

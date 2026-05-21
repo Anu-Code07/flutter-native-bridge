@@ -43,8 +43,8 @@ melos:
       run: melos exec --depends-on=build_runner -- "dart run build_runner build"
 
     native:check:
-      description: Validate native source layout is present for all plugin packages.
-      run: melos exec --scope="nativeflow_bridge_*" -- "test -d lib"
+      description: Validate native platform folders exist on the published package.
+      run: melos exec --scope="nativeflow_bridge" -- "test -d android && test -d ios"
 
 dev_dependencies:
   melos: ^7.7.0

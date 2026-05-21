@@ -1,11 +1,11 @@
 name: nativeflow_bridge
-description: Single public Flutter package for NativeFlow Bridge annotations, code generation, runtime, platform shells, FFI, and DevTools APIs.
+description: Type-safe Flutter-native bridge framework with code generation, runtime, platform plugins, FFI, and DevTools.
 version: 0.1.0
+license: MIT
 homepage: https://github.com/Anu-Code07/flutter-native-bridge
 repository: https://github.com/Anu-Code07/flutter-native-bridge
 issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
-documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
-author: Anurag
+documentation: https://pub.dev/documentation/nativeflow_bridge/latest/
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -20,20 +20,31 @@ topics:
   - codegen
 
 dependencies:
+  # Resolves to 10.0.1 on older Flutter (meta 1.16 pin); 13.x on Flutter 3.44+ / Dart 3.12+.
+  analyzer: ">=10.0.1 <14.0.0"
+  build: ^4.0.6
   flutter:
     sdk: flutter
-  nativeflow_bridge_android: ^0.1.0
-  nativeflow_bridge_annotations: ^0.1.0
-  nativeflow_bridge_core: ^0.1.0
-  nativeflow_bridge_devtools: ^0.1.0
-  nativeflow_bridge_ffi: ^0.1.0
-  nativeflow_bridge_generator: ^0.1.0
-  nativeflow_bridge_ios: ^0.1.0
-  nativeflow_bridge_linux: ^0.1.0
-  nativeflow_bridge_macos: ^0.1.0
-  nativeflow_bridge_runtime: ^0.1.0
-  nativeflow_bridge_windows: ^0.1.0
+  meta: ">=1.16.0 <2.0.0"
+  source_gen: ^4.2.3
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  build_test: ^3.2.1
+  test: ^1.25.15
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: nativeflow.bridge.android
+        pluginClass: NativeFlowBridgePlugin
+      ios:
+        pluginClass: NativeFlowBridgePlugin
+      macos:
+        pluginClass: NativeFlowBridgeMacosPlugin
+      windows:
+        pluginClass: NativeFlowBridgeWindowsPlugin
+      linux:
+        pluginClass: NativeFlowBridgeLinuxPlugin
+  assets:
+    - extension/devtools/config.yaml

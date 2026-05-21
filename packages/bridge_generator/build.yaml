@@ -1,8 +1,0 @@
-builders:
-  nativeflow_bridge:
-    import: "package:nativeflow_bridge_generator/builder.dart"
-    builder_factories: ["nativeflowBridgeBuilder"]
-    build_extensions: {".dart": [".nativeflow.g.part"]}
-    auto_apply: dependents
-    build_to: cache
-    applies_builders: ["source_gen|combining_builder"]

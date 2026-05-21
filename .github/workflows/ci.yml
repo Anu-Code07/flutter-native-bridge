@@ -27,10 +27,14 @@ jobs:
   flutter:
     name: Flutter runtime packages
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter-version: ["3.27.0", "3.44.0"]
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: ${{ matrix.flutter-version }}
           channel: stable
       - name: Install Melos
         run: dart pub global activate melos

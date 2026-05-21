@@ -1,11 +1,7 @@
 name: nativeflow_bridge_runtime
-description: Flutter runtime for generated NativeFlow Bridge channel clients, handlers, and event streams.
+description: Monorepo shim — use package:nativeflow_bridge/runtime.dart on pub.dev.
+publish_to: none
 version: 0.1.0
-homepage: https://github.com/Anu-Code07/flutter-native-bridge
-repository: https://github.com/Anu-Code07/flutter-native-bridge
-issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
-documentation: https://github.com/Anu-Code07/flutter-native-bridge/tree/main/docs
-author: Anurag
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -13,17 +9,8 @@ environment:
 
 resolution: workspace
 
-topics:
-  - flutter
-  - native
-  - bridge
-  - runtime
-
 dependencies:
   flutter:
     sdk: flutter
-  nativeflow_bridge_core: ^0.1.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  nativeflow_bridge:
+    path: ../nativeflow_bridge

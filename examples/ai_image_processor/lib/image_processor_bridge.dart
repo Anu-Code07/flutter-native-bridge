@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:nativeflow_bridge_annotations/bridge_annotations.dart';
+import 'package:nativeflow_bridge/nativeflow_bridge.dart';
 
 part 'image_processor_bridge.g.dart';
 

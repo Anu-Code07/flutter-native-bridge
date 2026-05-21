@@ -71,28 +71,29 @@ flowchart LR
   K --> M[C/C++/Rust Runtime]
 ```
 
-## Packages
+## Package (pub.dev)
 
-Use `nativeflow_bridge` as the single public package import:
+Only **`nativeflow_bridge`** is published to pub.dev. It contains annotations,
+code generation, runtime, FFI, DevTools, and all platform native plugins.
+
+**Recommended import:**
 
 ```dart
 import 'package:nativeflow_bridge/nativeflow_bridge.dart';
 ```
 
-The packages intentionally separate compile-time APIs from runtime behavior:
+**Optional granular imports** (same package, no extra dependencies):
 
-- `nativeflow_bridge` is the public umbrella package published for consumers.
-  It re-exports the workspace packages from one library entrypoint.
-- `nativeflow_bridge_annotations` has no Flutter dependency and is safe for
-  domain packages.
-- `nativeflow_bridge_generator` depends on `analyzer`, `build`, and
-  `source_gen` and emits generated Dart plus native contract metadata.
-- `nativeflow_bridge_core` owns transport-neutral descriptors, codec contracts,
-  serializer interfaces, and typed exceptions.
-- `nativeflow_bridge_runtime` owns Flutter channel execution, event
-  multiplexing, buffering, cancellation, and lifecycle-aware registration.
-- Platform packages provide native plugin shells and runtime primitives that can
-  be consumed by generated Kotlin, Swift, and C++ code.
+```dart
+import 'package:nativeflow_bridge/annotations.dart';
+import 'package:nativeflow_bridge/core.dart';
+import 'package:nativeflow_bridge/runtime.dart';
+import 'package:nativeflow_bridge/ffi.dart';
+import 'package:nativeflow_bridge/builder.dart'; // build_runner
+```
+
+The `packages/bridge_*` folders are monorepo-only compatibility shims
+(`publish_to: none`) for local development.
 
 ## Developer workflow
 
@@ -104,15 +105,31 @@ melos run test
 melos run format
 ```
 
-> This repository requires a Flutter/Dart SDK on the machine running the
-> commands.
+> Supports **Flutter 3.27+** (Dart 3.6+). **Recommended:** Flutter **3.44+** for latest
+> `analyzer` 13.x. Older stable releases resolve `analyzer` 10.0.1 automatically.
 
 See [PUBLISHING.md](PUBLISHING.md) for pub.dev dry-run commands and package
 publish order.
 
-## Status
+See [docs/examples.md](docs/examples.md) for payment, BLE, FFI, and KYC example
+patterns (also in the [`nativeflow_bridge` README](packages/nativeflow_bridge/README.md)
+shown on pub.dev).
 
-This is the initial SDK foundation. It establishes package boundaries, public
-APIs, generator flow, runtime abstractions, native runtime shells, examples,
-documentation, and CI so future work can fill out platform-specific codegen and
-integration tests without changing the architecture.
+## Status (0.1.0 — experimental)
+
+**Version 0.1.0 is an early, experimental release.** The public API, generated
+output, and native contracts may change in minor releases until 1.0.0.
+
+What works today:
+
+- Package boundaries, annotations, core descriptors, runtime channel APIs
+- `build_runner` code generation for Dart clients and contract metadata
+- Platform plugin shells (Android, iOS, macOS, Windows, Linux) and FFI helpers
+
+Not yet production-complete (see [docs/roadmap.md](docs/roadmap.md)):
+
+- Writing generated Kotlin/Swift/C++ into native source sets
+- Broad integration test coverage across platforms
+- Binary/protobuf codecs and enterprise transport extensions
+
+Use only if you accept breaking changes; pin exact versions in `pubspec.yaml`.

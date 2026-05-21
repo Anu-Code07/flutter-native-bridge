@@ -1,4 +1,2 @@
-/// Public annotations consumed by `nativeflow_bridge_generator`.
-library nativeflow_bridge_annotations;
-
-export 'src/annotations.dart';
+@Deprecated('Use package:nativeflow_bridge/annotations.dart')
+export 'package:nativeflow_bridge/annotations.dart';

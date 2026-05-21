@@ -1,4 +1,4 @@
-/// Builder entrypoint for the NativeFlow Bridge umbrella package.
-library nativeflow_bridge_builder;
+/// build_runner entrypoint for NativeFlow Bridge code generation.
+library;
 
-export 'package:nativeflow_bridge_generator/builder.dart';
+export 'src/generator/builder_impl.dart';

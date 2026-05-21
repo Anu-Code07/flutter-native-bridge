@@ -1,52 +1,61 @@
 # Publishing
 
-NativeFlow Bridge is a pub workspace with a single public umbrella package:
-`nativeflow_bridge`. Publish packages from their package directories, not from
-the workspace root.
+NativeFlow Bridge publishes **one package** to pub.dev: `nativeflow_bridge`.
 
-Run a dry run before publishing the public package:
+All SDK code (annotations, core, generator, runtime, FFI, DevTools, and native
+platform plugins) lives in `packages/nativeflow_bridge/`. The other folders under
+`packages/bridge_*` are monorepo-only compatibility shims (`publish_to: none`).
+
+## Dry run
+
+Supports Flutter **3.27+** (Dart **3.6+**). Flutter **3.44+** recommended for latest tooling.
 
 ```bash
+dart pub global activate melos
+melos bootstrap
+melos run analyze
+melos run test
 dart pub -C packages/nativeflow_bridge publish --dry-run
 ```
 
-The umbrella package exposes one import for consumers:
+## Consumer imports
+
+**Recommended** — single umbrella import:
 
 ```dart
 import 'package:nativeflow_bridge/nativeflow_bridge.dart';
 ```
 
-The internal workspace packages remain publishable implementation packages. Run
-dry runs for them only when publishing or validating those package boundaries:
+**Optional** — granular imports from the same package (no extra pub deps):
 
-```bash
-dart pub -C packages/bridge_annotations publish --dry-run
-dart pub -C packages/bridge_core publish --dry-run
-dart pub -C packages/bridge_generator publish --dry-run
-dart pub -C packages/bridge_runtime publish --dry-run
-dart pub -C packages/bridge_android publish --dry-run
-dart pub -C packages/bridge_ios publish --dry-run
-dart pub -C packages/bridge_macos publish --dry-run
-dart pub -C packages/bridge_windows publish --dry-run
-dart pub -C packages/bridge_linux publish --dry-run
-dart pub -C packages/bridge_ffi publish --dry-run
-dart pub -C packages/bridge_devtools publish --dry-run
+```dart
+import 'package:nativeflow_bridge/annotations.dart';
+import 'package:nativeflow_bridge/core.dart';
+import 'package:nativeflow_bridge/runtime.dart';
+import 'package:nativeflow_bridge/ffi.dart';
+import 'package:nativeflow_bridge/devtools.dart';
 ```
 
-If publishing every workspace package, publish them in dependency order:
+Code generation in your app:
 
-1. `nativeflow_bridge_annotations`
-2. `nativeflow_bridge_core`
-3. `nativeflow_bridge_generator`
-4. `nativeflow_bridge_runtime`
-5. `nativeflow_bridge_ffi`
-6. `nativeflow_bridge_android`
-7. `nativeflow_bridge_ios`
-8. `nativeflow_bridge_macos`
-9. `nativeflow_bridge_windows`
-10. `nativeflow_bridge_linux`
-11. `nativeflow_bridge_devtools`
-12. `nativeflow_bridge`
+```yaml
+dev_dependencies:
+  build_runner: ^2.4.15
+  nativeflow_bridge: ^0.1.0
+```
 
-Author attribution is Anurag in the public package metadata, license, package
-READMEs, and CocoaPods metadata.
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+## Publish
+
+1. [Verify your publisher](https://pub.dev/help/publishing#publishing-your-package) on pub.dev.
+2. Confirm checks above pass.
+3. Publish only from the package directory:
+
+```bash
+dart pub -C packages/nativeflow_bridge publish
+```
+
+There is no multi-package publish order.

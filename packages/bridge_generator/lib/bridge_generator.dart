@@ -1,5 +1,2 @@
-/// Public generator entrypoints for custom build integrations.
-library nativeflow_bridge_generator;
-
-export 'builder.dart';
-export 'src/native_contract_emitters.dart';
+@Deprecated('Use package:nativeflow_bridge/builder.dart')
+export 'package:nativeflow_bridge/builder.dart';

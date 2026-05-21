@@ -1,4 +1,4 @@
-/// Android runtime package marker for NativeFlow Bridge.
+@Deprecated('Platform runtime is provided by package:nativeflow_bridge')
 library nativeflow_bridge_android;
 
 const String nativeFlowAndroidRuntimeVersion = '0.1.0';
