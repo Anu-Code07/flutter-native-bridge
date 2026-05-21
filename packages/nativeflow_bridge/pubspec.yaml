@@ -46,5 +46,3 @@ flutter:
         pluginClass: NativeFlowBridgeWindowsPlugin
       linux:
         pluginClass: NativeFlowBridgeLinuxPlugin
-  assets:
-    - extension/devtools/config.yaml
