@@ -32,14 +32,7 @@ enum BridgeCodecKind {
 }
 
 /// Native platforms a generated contract should target.
-enum BridgePlatformTarget {
-  android,
-  ios,
-  macos,
-  windows,
-  linux,
-  ffi,
-}
+enum BridgePlatformTarget { android, ios, macos, windows, linux, ffi }
 
 /// Execution policy for asynchronous native work.
 enum BridgeExecutionPolicy { mainThread, backgroundThread, isolate }

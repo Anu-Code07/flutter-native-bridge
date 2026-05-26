@@ -7,13 +7,16 @@ import 'package:nativeflow_bridge/devtools.dart';
 /// In a real app you would mount `BridgeInspectorPanel` from
 /// `package:nativeflow_bridge/devtools.dart` in a debug-only route.
 void main() async {
-  final inspector = BridgeInspector.instance
-    ..clear()
-    ..capturePayloads = true;
+  final inspector =
+      BridgeInspector.instance
+        ..clear()
+        ..capturePayloads = true;
 
   inspector.events.listen((event) {
-    print('[bridge] ${event.channel}/${event.operation} ${event.status.name} '
-        '${event.duration?.inMicroseconds ?? '-'}µs');
+    print(
+      '[bridge] ${event.channel}/${event.operation} ${event.status.name} '
+      '${event.duration?.inMicroseconds ?? '-'}µs',
+    );
   });
 
   // Synthetic event: pretend we just invoked a payment method.
@@ -61,4 +64,3 @@ void main() async {
   print('--- export ---');
   print(inspector.exportJson());
 }
-

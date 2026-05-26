@@ -16,13 +16,13 @@ final class BridgeEventStreamRegistry {
     BinaryMessenger? binaryMessenger,
     BridgeInspector? inspector,
     BridgeErrorMapper? errorMapper,
-  })  : _descriptor = descriptor,
-        _codec = codec,
-        _serializers = serializers,
-        _binaryMessenger = binaryMessenger,
-        _inspector = inspector,
-        _errorMapper =
-            errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor);
+  }) : _descriptor = descriptor,
+       _codec = codec,
+       _serializers = serializers,
+       _binaryMessenger = binaryMessenger,
+       _inspector = inspector,
+       _errorMapper =
+           errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor);
 
   final BridgeDescriptor _descriptor;
   final BridgeCodec _codec;
@@ -37,9 +37,10 @@ final class BridgeEventStreamRegistry {
     String eventName, {
     Duration reconnectDelay = const Duration(milliseconds: 250),
   }) {
-    final descriptor = _descriptor.events.where((event) {
-      return event.name == eventName;
-    }).firstOrNull;
+    final descriptor =
+        _descriptor.events.where((event) {
+          return event.name == eventName;
+        }).firstOrNull;
 
     if (descriptor == null) {
       throw BridgeRegistrationException(
@@ -59,14 +60,18 @@ final class BridgeEventStreamRegistry {
       );
     });
 
-    return shared.stream.map<T>((event) {
-      return _serializers.deserializeValue<T>(_codec.decode<Object?>(event));
-    }).handleError((Object error, StackTrace stackTrace) {
-      if (error is PlatformException) {
-        throw _errorMapper.map(error, stackTrace);
-      }
-      Error.throwWithStackTrace(error, stackTrace);
-    });
+    return shared.stream
+        .map<T>((event) {
+          return _serializers.deserializeValue<T>(
+            _codec.decode<Object?>(event),
+          );
+        })
+        .handleError((Object error, StackTrace stackTrace) {
+          if (error is PlatformException) {
+            throw _errorMapper.map(error, stackTrace);
+          }
+          Error.throwWithStackTrace(error, stackTrace);
+        });
   }
 }
 
@@ -80,13 +85,13 @@ class _SharedEventStream {
     required this.reconnectDelay,
     BinaryMessenger? binaryMessenger,
     BridgeInspector? inspector,
-  })  : _channel = EventChannel(
-          channelName,
-          const StandardMethodCodec(),
-          binaryMessenger,
-        ),
-        _eventDescriptor = eventDescriptor,
-        _inspector = inspector;
+  }) : _channel = EventChannel(
+         channelName,
+         const StandardMethodCodec(),
+         binaryMessenger,
+       ),
+       _eventDescriptor = eventDescriptor,
+       _inspector = inspector;
 
   final String channelName;
   final String bridgeName;

@@ -11,12 +11,13 @@ final class KotlinContractEmitter implements NativeContractEmitter {
 
   @override
   String emit(BridgeContract contract) {
-    final buffer = StringBuffer()
-      ..writeln('package nativeflow.generated')
-      ..writeln()
-      ..writeln('import kotlinx.coroutines.flow.Flow')
-      ..writeln()
-      ..writeln('interface ${contract.name}NativeBridge {');
+    final buffer =
+        StringBuffer()
+          ..writeln('package nativeflow.generated')
+          ..writeln()
+          ..writeln('import kotlinx.coroutines.flow.Flow')
+          ..writeln()
+          ..writeln('interface ${contract.name}NativeBridge {');
 
     for (final method in contract.methods) {
       final parameters = method.parameters
@@ -41,8 +42,9 @@ final class KotlinContractEmitter implements NativeContractEmitter {
       buffer.writeln();
       buffer.writeln('object ${contract.name}Errors {');
       for (final error in contract.errors) {
-        buffer
-            .writeln('  const val ${_constName(error.code)} = "${error.code}"');
+        buffer.writeln(
+          '  const val ${_constName(error.code)} = "${error.code}"',
+        );
       }
       buffer.writeln('}');
     }
@@ -50,14 +52,14 @@ final class KotlinContractEmitter implements NativeContractEmitter {
   }
 
   String _kotlinType(String dartType) => switch (_normalizeType(dartType)) {
-        'void' => 'Unit',
-        'bool' => 'Boolean',
-        'int' => 'Long',
-        'double' => 'Double',
-        'String' => 'String',
-        'Uint8List' => 'ByteArray',
-        _ => 'Map<String, Any?>',
-      };
+    'void' => 'Unit',
+    'bool' => 'Boolean',
+    'int' => 'Long',
+    'double' => 'Double',
+    'String' => 'String',
+    'Uint8List' => 'ByteArray',
+    _ => 'Map<String, Any?>',
+  };
 }
 
 /// Emits Swift protocols implemented by iOS/macOS plugin adapters.
@@ -66,11 +68,12 @@ final class SwiftContractEmitter implements NativeContractEmitter {
 
   @override
   String emit(BridgeContract contract) {
-    final buffer = StringBuffer()
-      ..writeln('import Combine')
-      ..writeln('import Foundation')
-      ..writeln()
-      ..writeln('protocol ${contract.name}NativeBridge {');
+    final buffer =
+        StringBuffer()
+          ..writeln('import Combine')
+          ..writeln('import Foundation')
+          ..writeln()
+          ..writeln('protocol ${contract.name}NativeBridge {');
 
     for (final method in contract.methods) {
       final parameters = method.parameters
@@ -105,14 +108,14 @@ final class SwiftContractEmitter implements NativeContractEmitter {
   }
 
   String _swiftType(String dartType) => switch (_normalizeType(dartType)) {
-        'void' => 'Void',
-        'bool' => 'Bool',
-        'int' => 'Int64',
-        'double' => 'Double',
-        'String' => 'String',
-        'Uint8List' => 'Data',
-        _ => '[String: Any?]',
-      };
+    'void' => 'Void',
+    'bool' => 'Bool',
+    'int' => 'Int64',
+    'double' => 'Double',
+    'String' => 'String',
+    'Uint8List' => 'Data',
+    _ => '[String: Any?]',
+  };
 }
 
 /// Emits a C++ handler stub for Windows plugins.
@@ -121,21 +124,22 @@ final class WindowsCppContractEmitter implements NativeContractEmitter {
 
   @override
   String emit(BridgeContract contract) {
-    final buffer = StringBuffer()
-      ..writeln('// Auto-generated NativeFlow Bridge Windows contract.')
-      ..writeln('#pragma once')
-      ..writeln()
-      ..writeln('#include <flutter/encodable_value.h>')
-      ..writeln('#include <flutter/method_call.h>')
-      ..writeln('#include <flutter/method_result.h>')
-      ..writeln('#include <memory>')
-      ..writeln('#include <string>')
-      ..writeln()
-      ..writeln('namespace nativeflow_generated {')
-      ..writeln()
-      ..writeln('class ${contract.name}NativeBridge {')
-      ..writeln(' public:')
-      ..writeln('  virtual ~${contract.name}NativeBridge() = default;');
+    final buffer =
+        StringBuffer()
+          ..writeln('// Auto-generated NativeFlow Bridge Windows contract.')
+          ..writeln('#pragma once')
+          ..writeln()
+          ..writeln('#include <flutter/encodable_value.h>')
+          ..writeln('#include <flutter/method_call.h>')
+          ..writeln('#include <flutter/method_result.h>')
+          ..writeln('#include <memory>')
+          ..writeln('#include <string>')
+          ..writeln()
+          ..writeln('namespace nativeflow_generated {')
+          ..writeln()
+          ..writeln('class ${contract.name}NativeBridge {')
+          ..writeln(' public:')
+          ..writeln('  virtual ~${contract.name}NativeBridge() = default;');
     for (final method in contract.methods) {
       buffer.writeln(
         '  virtual void ${method.name}(const flutter::EncodableValue& arguments, '
@@ -156,14 +160,15 @@ final class LinuxCppContractEmitter implements NativeContractEmitter {
 
   @override
   String emit(BridgeContract contract) {
-    final buffer = StringBuffer()
-      ..writeln('// Auto-generated NativeFlow Bridge Linux contract.')
-      ..writeln('#pragma once')
-      ..writeln()
-      ..writeln('#include <flutter_linux/flutter_linux.h>')
-      ..writeln()
-      ..writeln('typedef struct {')
-      ..writeln('  const gchar* channel;');
+    final buffer =
+        StringBuffer()
+          ..writeln('// Auto-generated NativeFlow Bridge Linux contract.')
+          ..writeln('#pragma once')
+          ..writeln()
+          ..writeln('#include <flutter_linux/flutter_linux.h>')
+          ..writeln()
+          ..writeln('typedef struct {')
+          ..writeln('  const gchar* channel;');
     for (final method in contract.methods) {
       buffer.writeln(
         '  void (*${method.name})(FlMethodCall* call, FlMethodChannel* channel, gpointer user_data);',

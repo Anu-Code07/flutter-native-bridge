@@ -10,49 +10,39 @@ part of 'image_processor_bridge.dart';
 
 const Map<String, Object?> _$ImageProcessorBridgeFfiDescriptor =
     <String, Object?>{
-  'name': 'ImageProcessorBridge',
-  'library': 'nativeflow_image_processor',
-  'symbolPrefix': 'nf_image_',
-  'threading': 'isolate',
-  'methods': <Map<String, Object?>>[
-    <String, Object?>{
-      'name': 'blur',
-      'symbol': 'nf_image_blur',
-      'returnType': 'Uint8List',
-      'parameters': <Map<String, Object?>>[
+      'name': 'ImageProcessorBridge',
+      'library': 'nativeflow_image_processor',
+      'symbolPrefix': 'nf_image_',
+      'threading': 'isolate',
+      'methods': <Map<String, Object?>>[
         <String, Object?>{
-          'name': 'image',
-          'type': 'Uint8List',
+          'name': 'blur',
+          'symbol': 'nf_image_blur',
+          'returnType': 'Uint8List',
+          'parameters': <Map<String, Object?>>[
+            <String, Object?>{'name': 'image', 'type': 'Uint8List'},
+            <String, Object?>{'name': 'radius', 'type': 'double'},
+          ],
         },
         <String, Object?>{
-          'name': 'radius',
-          'type': 'double',
-        },
-      ],
-    },
-    <String, Object?>{
-      'name': 'enhance',
-      'symbol': 'nf_image_enhance',
-      'returnType': 'Uint8List',
-      'parameters': <Map<String, Object?>>[
-        <String, Object?>{
-          'name': 'image',
-          'type': 'Uint8List',
+          'name': 'enhance',
+          'symbol': 'nf_image_enhance',
+          'returnType': 'Uint8List',
+          'parameters': <Map<String, Object?>>[
+            <String, Object?>{'name': 'image', 'type': 'Uint8List'},
+          ],
         },
       ],
-    },
-  ],
-};
+    };
 
 final class _$ImageProcessorBridgeClient implements ImageProcessorBridge {
   _$ImageProcessorBridgeClient({
     NativeLibrary? library,
     NativeExecutor? executor,
     Map<String, ImageProcessorBridgeFfiHandler>? handlers,
-  })  : _library = library,
-        _executor = executor ?? const IsolateNativeExecutor(),
-        _handlers =
-            handlers ?? const <String, ImageProcessorBridgeFfiHandler>{};
+  }) : _library = library,
+       _executor = executor ?? const IsolateNativeExecutor(),
+       _handlers = handlers ?? const <String, ImageProcessorBridgeFfiHandler>{};
 
   final NativeLibrary? _library;
   final NativeExecutor _executor;
@@ -86,5 +76,5 @@ final class _$ImageProcessorBridgeClient implements ImageProcessorBridge {
 }
 
 /// Application-supplied FFI implementation for one [ImageProcessorBridge] symbol.
-typedef ImageProcessorBridgeFfiHandler = Object? Function(
-    List<Object?> arguments);
+typedef ImageProcessorBridgeFfiHandler =
+    Object? Function(List<Object?> arguments);

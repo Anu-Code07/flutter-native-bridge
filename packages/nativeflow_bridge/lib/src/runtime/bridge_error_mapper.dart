@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:nativeflow_bridge/core.dart';
 
 /// Builds a [BridgeException] from a native [PlatformException].
-typedef BridgeErrorFactory = BridgeException Function(
-    PlatformException error, StackTrace stackTrace);
+typedef BridgeErrorFactory =
+    BridgeException Function(PlatformException error, StackTrace stackTrace);
 
 /// Maps native error codes to strongly-typed Dart exceptions.
 ///
@@ -13,9 +13,9 @@ typedef BridgeErrorFactory = BridgeException Function(
 /// factories at runtime.
 final class BridgeErrorMapper {
   BridgeErrorMapper({Map<String, BridgeErrorFactory>? factories})
-      : _factories = Map<String, BridgeErrorFactory>.of(
-          factories ?? const <String, BridgeErrorFactory>{},
-        );
+    : _factories = Map<String, BridgeErrorFactory>.of(
+        factories ?? const <String, BridgeErrorFactory>{},
+      );
 
   /// Builds a mapper that already knows about `descriptor.errors`. Callers
   /// usually layer additional [register] calls on top of this base mapper.

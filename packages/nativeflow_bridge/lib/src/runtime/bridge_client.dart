@@ -30,15 +30,15 @@ final class BridgeClient {
     BridgeErrorMapper? errorMapper,
     BridgePayloadRedactor? redactor,
   }) : this._(
-          descriptor: descriptor,
-          codec: codec,
-          serializers: serializers ?? BridgeSerializerRegistry(),
-          binaryMessenger: binaryMessenger,
-          inspector: inspector ?? BridgeInspector.instance,
-          errorMapper:
-              errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor),
-          redactor: redactor ?? BridgePayloadRedactor(),
-        );
+         descriptor: descriptor,
+         codec: codec,
+         serializers: serializers ?? BridgeSerializerRegistry(),
+         binaryMessenger: binaryMessenger,
+         inspector: inspector ?? BridgeInspector.instance,
+         errorMapper:
+             errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor),
+         redactor: redactor ?? BridgePayloadRedactor(),
+       );
 
   BridgeClient._({
     required this.descriptor,
@@ -48,29 +48,29 @@ final class BridgeClient {
     required BridgeErrorMapper errorMapper,
     required BridgePayloadRedactor redactor,
     BinaryMessenger? binaryMessenger,
-  })  : _codec = codec,
-        _serializers = serializers,
-        _inspector = inspector,
-        _errorMapper = errorMapper,
-        _redactor = redactor,
-        _methodChannel = MethodChannel(
-          descriptor.channel,
-          const StandardMethodCodec(),
-          binaryMessenger,
-        ),
-        _messageChannel = BasicMessageChannel<Object?>(
-          '${descriptor.channel}/messages',
-          const StandardMessageCodec(),
-          binaryMessenger: binaryMessenger,
-        ),
-        _eventStreams = BridgeEventStreamRegistry(
-          descriptor: descriptor,
-          codec: codec,
-          serializers: serializers,
-          binaryMessenger: binaryMessenger,
-          inspector: inspector,
-          errorMapper: errorMapper,
-        );
+  }) : _codec = codec,
+       _serializers = serializers,
+       _inspector = inspector,
+       _errorMapper = errorMapper,
+       _redactor = redactor,
+       _methodChannel = MethodChannel(
+         descriptor.channel,
+         const StandardMethodCodec(),
+         binaryMessenger,
+       ),
+       _messageChannel = BasicMessageChannel<Object?>(
+         '${descriptor.channel}/messages',
+         const StandardMessageCodec(),
+         binaryMessenger: binaryMessenger,
+       ),
+       _eventStreams = BridgeEventStreamRegistry(
+         descriptor: descriptor,
+         codec: codec,
+         serializers: serializers,
+         binaryMessenger: binaryMessenger,
+         inspector: inspector,
+         errorMapper: errorMapper,
+       );
 
   final BridgeDescriptor descriptor;
   final BridgeCodec _codec;
@@ -110,27 +110,28 @@ final class BridgeClient {
     );
 
     try {
-      final value = timeout == null
-          ? await operation
-          : await operation.timeout(
-              timeout,
-              onTimeout: () {
-                _recordTerminal(
-                  id: telemetryId,
-                  operation: method,
-                  kind: BridgeOperationKind.method,
-                  status: BridgeOperationStatus.timeout,
-                  startedAt: _startedAt(stopwatch),
-                  errorCode: 'timeout',
-                  errorMessage:
-                      'Bridge call "$method" timed out after $timeout.',
-                  transport: 'methodChannel',
-                );
-                throw BridgeTimeoutException(
-                  'Bridge call "$method" timed out after $timeout.',
-                );
-              },
-            );
+      final value =
+          timeout == null
+              ? await operation
+              : await operation.timeout(
+                timeout,
+                onTimeout: () {
+                  _recordTerminal(
+                    id: telemetryId,
+                    operation: method,
+                    kind: BridgeOperationKind.method,
+                    status: BridgeOperationStatus.timeout,
+                    startedAt: _startedAt(stopwatch),
+                    errorCode: 'timeout',
+                    errorMessage:
+                        'Bridge call "$method" timed out after $timeout.',
+                    transport: 'methodChannel',
+                  );
+                  throw BridgeTimeoutException(
+                    'Bridge call "$method" timed out after $timeout.',
+                  );
+                },
+              );
       final decoded = _serializers.deserializeValue<T>(
         _codec.decode<Object?>(value),
       );
@@ -180,27 +181,28 @@ final class BridgeClient {
     final operation = _messageChannel.send(payload);
 
     try {
-      final value = timeout == null
-          ? await operation
-          : await operation.timeout(
-              timeout,
-              onTimeout: () {
-                _recordTerminal(
-                  id: telemetryId,
-                  operation: endpoint,
-                  kind: BridgeOperationKind.message,
-                  status: BridgeOperationStatus.timeout,
-                  startedAt: _startedAt(stopwatch),
-                  errorCode: 'timeout',
-                  errorMessage:
-                      'Bridge message "$endpoint" timed out after $timeout.',
-                  transport: 'basicMessageChannel',
-                );
-                throw BridgeTimeoutException(
-                  'Bridge message "$endpoint" timed out after $timeout.',
-                );
-              },
-            );
+      final value =
+          timeout == null
+              ? await operation
+              : await operation.timeout(
+                timeout,
+                onTimeout: () {
+                  _recordTerminal(
+                    id: telemetryId,
+                    operation: endpoint,
+                    kind: BridgeOperationKind.message,
+                    status: BridgeOperationStatus.timeout,
+                    startedAt: _startedAt(stopwatch),
+                    errorCode: 'timeout',
+                    errorMessage:
+                        'Bridge message "$endpoint" timed out after $timeout.',
+                    transport: 'basicMessageChannel',
+                  );
+                  throw BridgeTimeoutException(
+                    'Bridge message "$endpoint" timed out after $timeout.',
+                  );
+                },
+              );
       final decoded = _serializers.deserializeValue<T>(
         _codec.decode<Object?>(value),
       );
@@ -255,9 +257,10 @@ final class BridgeClient {
         startedAt: DateTime.now(),
         requestBytes: estimatePayloadBytes(requestPayload),
         transport: transport,
-        requestPreview: _inspector.capturePayloads
-            ? _redactor.redact(requestPayload)
-            : null,
+        requestPreview:
+            _inspector.capturePayloads
+                ? _redactor.redact(requestPayload)
+                : null,
       ),
     );
     return id;
@@ -288,9 +291,10 @@ final class BridgeClient {
         errorCode: errorCode,
         errorMessage: errorMessage,
         transport: transport,
-        responsePreview: _inspector.capturePayloads
-            ? _redactor.redact(responsePayload)
-            : null,
+        responsePreview:
+            _inspector.capturePayloads
+                ? _redactor.redact(responsePayload)
+                : null,
       ),
     );
   }

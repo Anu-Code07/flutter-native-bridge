@@ -85,7 +85,9 @@ $output
       }
       bindings.add(
         BridgeErrorBinding(
-            dartType: element.name ?? 'UnknownError', code: code),
+          dartType: element.name ?? 'UnknownError',
+          code: code,
+        ),
       );
     }
     return bindings;
@@ -105,15 +107,17 @@ $output
 
     final reader = ConstantReader(annotation);
     final className = element.name ?? 'AnonymousBridge';
-    final channel = reader.read('channel').literalValue as String? ??
+    final channel =
+        reader.read('channel').literalValue as String? ??
         _defaultChannelName(className);
     final version = reader.read('version').intValue;
     final codec = _readEnumName(reader, 'codec') ?? 'json';
     final platforms = _readEnumList(reader, 'platforms');
-    final operations = element.methods
-        .where((method) => !method.isStatic && method.isAbstract)
-        .map(_readOperation)
-        .toList();
+    final operations =
+        element.methods
+            .where((method) => !method.isStatic && method.isAbstract)
+            .map(_readOperation)
+            .toList();
 
     return BridgeContract(
       name: className,
@@ -123,9 +127,10 @@ $output
       events: operations.where((operation) => operation.isStream).toList(),
       errors: errorBindings,
       codec: codec,
-      platforms: platforms.isEmpty
-          ? <String>['android', 'ios', 'macos', 'windows', 'linux']
-          : platforms,
+      platforms:
+          platforms.isEmpty
+              ? <String>['android', 'ios', 'macos', 'windows', 'linux']
+              : platforms,
     );
   }
 
@@ -133,22 +138,26 @@ $output
     final returnType = _typeName(method.returnType);
     final eventAnnotation = _eventChecker.firstAnnotationOf(method);
     final methodAnnotation = _methodChecker.firstAnnotationOf(method);
-    final operationName = _readNameOverride(eventAnnotation) ??
+    final operationName =
+        _readNameOverride(eventAnnotation) ??
         _readNameOverride(methodAnnotation) ??
         method.name ??
         'anonymousMethod';
 
-    final transport = methodAnnotation == null
-        ? 'methodChannel'
-        : _readEnumName(ConstantReader(methodAnnotation), 'transport') ??
-            'methodChannel';
+    final transport =
+        methodAnnotation == null
+            ? 'methodChannel'
+            : _readEnumName(ConstantReader(methodAnnotation), 'transport') ??
+                'methodChannel';
 
-    final replay = eventAnnotation == null
-        ? 0
-        : (ConstantReader(eventAnnotation).read('replay').intValue);
-    final bufferSize = eventAnnotation == null
-        ? 64
-        : (ConstantReader(eventAnnotation).read('bufferSize').intValue);
+    final replay =
+        eventAnnotation == null
+            ? 0
+            : (ConstantReader(eventAnnotation).read('replay').intValue);
+    final bufferSize =
+        eventAnnotation == null
+            ? 64
+            : (ConstantReader(eventAnnotation).read('bufferSize').intValue);
 
     return BridgeOperation(
       name: operationName,
@@ -211,21 +220,26 @@ $output
   }
 
   String _emitDescriptor(BridgeContract contract) {
-    final descriptorName = r'_$' '${contract.name}Descriptor';
-    final buffer = StringBuffer()
-      ..writeln('const BridgeDescriptor $descriptorName = BridgeDescriptor(')
-      ..writeln("  name: '${contract.name}',")
-      ..writeln("  channel: '${contract.channel}',")
-      ..writeln('  version: ${contract.version},')
-      ..writeln('  codec: BridgeCodecKind.${contract.codec},')
-      ..writeln('  platforms: <BridgePlatformTarget>[')
-      ..writeln(
-        contract.platforms
-            .map((platform) => '    BridgePlatformTarget.$platform,')
-            .join('\n'),
-      )
-      ..writeln('  ],')
-      ..writeln('  methods: <BridgeMethodDescriptor>[');
+    final descriptorName =
+        r'_$'
+        '${contract.name}Descriptor';
+    final buffer =
+        StringBuffer()
+          ..writeln(
+            'const BridgeDescriptor $descriptorName = BridgeDescriptor(',
+          )
+          ..writeln("  name: '${contract.name}',")
+          ..writeln("  channel: '${contract.channel}',")
+          ..writeln('  version: ${contract.version},')
+          ..writeln('  codec: BridgeCodecKind.${contract.codec},')
+          ..writeln('  platforms: <BridgePlatformTarget>[')
+          ..writeln(
+            contract.platforms
+                .map((platform) => '    BridgePlatformTarget.$platform,')
+                .join('\n'),
+          )
+          ..writeln('  ],')
+          ..writeln('  methods: <BridgeMethodDescriptor>[');
 
     for (final method in contract.methods) {
       buffer
@@ -282,24 +296,29 @@ $output
   }
 
   String _emitClient(BridgeContract contract) {
-    final className = r'_$' '${contract.name}Client';
-    final descriptorName = r'_$' '${contract.name}Descriptor';
+    final className =
+        r'_$'
+        '${contract.name}Client';
+    final descriptorName =
+        r'_$'
+        '${contract.name}Descriptor';
     final codecExpression = _codecExpression(contract.codec);
-    final buffer = StringBuffer()
-      ..writeln('final class $className implements ${contract.name} {')
-      ..writeln('  $className({')
-      ..writeln('    BridgeClient? client,')
-      ..writeln('    BridgeSerializerRegistry? serializers,')
-      ..writeln('  }) : _client = client ??')
-      ..writeln('            BridgeClient(')
-      ..writeln('              descriptor: $descriptorName,')
-      ..writeln('              codec: $codecExpression,')
-      ..writeln('              serializers: serializers,')
-      ..writeln('              errorMapper: _buildErrorMapper(),')
-      ..writeln('            );')
-      ..writeln()
-      ..writeln('  final BridgeClient _client;')
-      ..writeln();
+    final buffer =
+        StringBuffer()
+          ..writeln('final class $className implements ${contract.name} {')
+          ..writeln('  $className({')
+          ..writeln('    BridgeClient? client,')
+          ..writeln('    BridgeSerializerRegistry? serializers,')
+          ..writeln('  }) : _client = client ??')
+          ..writeln('            BridgeClient(')
+          ..writeln('              descriptor: $descriptorName,')
+          ..writeln('              codec: $codecExpression,')
+          ..writeln('              serializers: serializers,')
+          ..writeln('              errorMapper: _buildErrorMapper(),')
+          ..writeln('            );')
+          ..writeln()
+          ..writeln('  final BridgeClient _client;')
+          ..writeln();
 
     for (final method in contract.methods) {
       buffer.writeln(_emitMethod(method));
@@ -316,16 +335,12 @@ $output
       );
     for (final error in contract.errors) {
       buffer
-        ..writeln(
-          "    mapper.register('${error.code}', (error, stackTrace) {",
-        )
+        ..writeln("    mapper.register('${error.code}', (error, stackTrace) {")
         ..writeln('      try {')
         ..writeln('        return ${error.dartType}();')
         ..writeln('      } on NoSuchMethodError {')
         ..writeln('        return BridgePlatformException(')
-        ..writeln(
-          "          error.message ?? '${error.dartType} reported.',",
-        )
+        ..writeln("          error.message ?? '${error.dartType} reported.',")
         ..writeln('          code: error.code,')
         ..writeln('          details: error.details,')
         ..writeln('          cause: error,')
@@ -345,9 +360,10 @@ $output
     final parameters = _formalParameterList(method.parameters);
     final arguments = _argumentMap(method.parameters);
     final payloadType = _futurePayloadType(method.returnType);
-    final timeout = method.timeoutMilliseconds == null
-        ? 'null'
-        : 'const Duration(milliseconds: ${method.timeoutMilliseconds})';
+    final timeout =
+        method.timeoutMilliseconds == null
+            ? 'null'
+            : 'const Duration(milliseconds: ${method.timeoutMilliseconds})';
     final transportCall = switch (method.transport) {
       'basicMessageChannel' => '''
     return _client.send<$payloadType>(
@@ -441,26 +457,34 @@ $transportCall
     required BridgeContract contract,
     required String body,
   }) {
-    final name = r'_$' '${contract.name}$suffix';
+    final name =
+        r'_$'
+        '${contract.name}$suffix';
     return 'const String $name = r"""\n$body\n""";';
   }
 
   String _emitFfiClient(FfiBridgeContract contract) {
-    final descriptorName = r'_$' '${contract.name}FfiDescriptor';
-    final clientName = r'_$' '${contract.name}Client';
+    final descriptorName =
+        r'_$'
+        '${contract.name}FfiDescriptor';
+    final clientName =
+        r'_$'
+        '${contract.name}Client';
     final symbolPrefix =
         contract.symbolPrefix == null ? "''" : "'${contract.symbolPrefix}'";
     final libraryLiteral =
         contract.library == null ? 'null' : "'${contract.library}'";
 
-    final buffer = StringBuffer()
-      ..writeln(
-          'const Map<String, Object?> $descriptorName = <String, Object?>{')
-      ..writeln("  'name': '${contract.name}',")
-      ..writeln("  'library': $libraryLiteral,")
-      ..writeln("  'symbolPrefix': $symbolPrefix,")
-      ..writeln("  'threading': '${contract.threading}',")
-      ..writeln("  'methods': <Map<String, Object?>>[");
+    final buffer =
+        StringBuffer()
+          ..writeln(
+            'const Map<String, Object?> $descriptorName = <String, Object?>{',
+          )
+          ..writeln("  'name': '${contract.name}',")
+          ..writeln("  'library': $libraryLiteral,")
+          ..writeln("  'symbolPrefix': $symbolPrefix,")
+          ..writeln("  'threading': '${contract.threading}',")
+          ..writeln("  'methods': <Map<String, Object?>>[");
     for (final method in contract.methods) {
       buffer
         ..writeln('    <String, Object?>{')
@@ -487,9 +511,7 @@ $transportCall
       ..writeln('  $clientName({')
       ..writeln('    NativeLibrary? library,')
       ..writeln('    NativeExecutor? executor,')
-      ..writeln(
-        '    Map<String, ${contract.name}FfiHandler>? handlers,',
-      )
+      ..writeln('    Map<String, ${contract.name}FfiHandler>? handlers,')
       ..writeln('  })  : _library = library,')
       ..writeln(
         '        _executor = executor ?? ${_ffiExecutor(contract.threading)},',
@@ -500,9 +522,7 @@ $transportCall
       ..writeln()
       ..writeln('  final NativeLibrary? _library;')
       ..writeln('  final NativeExecutor _executor;')
-      ..writeln(
-        '  final Map<String, ${contract.name}FfiHandler> _handlers;',
-      )
+      ..writeln('  final Map<String, ${contract.name}FfiHandler> _handlers;')
       ..writeln();
     for (final method in contract.methods) {
       buffer.writeln(_emitFfiMethod(method));
@@ -542,10 +562,10 @@ $transportCall
   }
 
   String _ffiExecutor(String threading) => switch (threading) {
-        'main' => 'const InlineNativeExecutor()',
-        'isolate' => 'const IsolateNativeExecutor()',
-        _ => 'const IsolateNativeExecutor()',
-      };
+    'main' => 'const InlineNativeExecutor()',
+    'isolate' => 'const IsolateNativeExecutor()',
+    _ => 'const IsolateNativeExecutor()',
+  };
 
   String _formalParameterList(List<BridgeParameter> parameters) {
     if (parameters.isEmpty) {
@@ -589,17 +609,19 @@ $transportCall
     if (parameters.isEmpty) {
       return 'null';
     }
-    final entries = parameters.map((parameter) {
-      return "'${parameter.name}': ${parameter.name}";
-    }).join(', ');
+    final entries = parameters
+        .map((parameter) {
+          return "'${parameter.name}': ${parameter.name}";
+        })
+        .join(', ');
     return '<String, Object?>{$entries}';
   }
 
   String _codecExpression(String codec) => switch (codec) {
-        'json' => 'const JsonBridgeCodec()',
-        'identity' => 'const IdentityBridgeCodec()',
-        _ => 'const IdentityBridgeCodec()',
-      };
+    'json' => 'const JsonBridgeCodec()',
+    'identity' => 'const IdentityBridgeCodec()',
+    _ => 'const IdentityBridgeCodec()',
+  };
 
   String _typeName(DartType type) {
     return type.getDisplayString();

@@ -16,7 +16,7 @@ abstract class PaymentBridge {
 @BridgeError('payment_cancelled')
 final class PaymentCancelledException extends BridgeException {
   const PaymentCancelledException()
-      : super('User cancelled checkout.', code: 'payment_cancelled');
+    : super('User cancelled checkout.', code: 'payment_cancelled');
 }
 
 void main() {

@@ -79,12 +79,12 @@ void main() {
     });
 
     test('uses registered factories for typed errors', () {
-      final mapper = BridgeErrorMapper()
-        ..register(
-          'custom_failure',
-          (error, stackTrace) =>
-              const BridgeException('Custom', code: 'custom_failure'),
-        );
+      final mapper =
+          BridgeErrorMapper()..register(
+            'custom_failure',
+            (error, stackTrace) =>
+                const BridgeException('Custom', code: 'custom_failure'),
+          );
       final exception = mapper.map(
         _platformException('custom_failure'),
         StackTrace.current,

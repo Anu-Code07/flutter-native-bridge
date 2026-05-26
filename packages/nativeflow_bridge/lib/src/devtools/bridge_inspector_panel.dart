@@ -39,14 +39,12 @@ class _BridgeInspectorPanelState extends State<BridgeInspectorPanel>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _subscription = widget._resolvedInspector.events.listen(
-      (_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      },
-    );
+    _subscription = widget._resolvedInspector.events.listen((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -94,11 +92,12 @@ class _BridgeInspectorPanelState extends State<BridgeInspectorPanel>
                 ),
                 _StatsTab(stats: inspector.stats),
                 _ErrorsTab(
-                  events: inspector.timeline
-                      .where((event) => event.errorCode != null)
-                      .toList()
-                      .reversed
-                      .toList(),
+                  events:
+                      inspector.timeline
+                          .where((event) => event.errorCode != null)
+                          .toList()
+                          .reversed
+                          .toList(),
                 ),
               ],
             ),
@@ -142,10 +141,7 @@ class _Header extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            child: Text(title, style: Theme.of(context).textTheme.titleMedium),
           ),
           if (kDebugMode)
             IconButton(
@@ -211,9 +207,10 @@ class _TimelineTab extends StatelessWidget {
         const VerticalDivider(width: 1),
         Expanded(
           flex: 4,
-          child: selected == null
-              ? const _EmptyState(message: 'Select an entry to inspect.')
-              : _DetailView(event: selected!),
+          child:
+              selected == null
+                  ? const _EmptyState(message: 'Select an entry to inspect.')
+                  : _DetailView(event: selected!),
         ),
       ],
     );
@@ -394,22 +391,23 @@ class _StatsTab extends StatelessWidget {
           DataColumn(label: Text('Min µs'), numeric: true),
           DataColumn(label: Text('Max µs'), numeric: true),
         ],
-        rows: stats
-            .map(
-              (stat) => DataRow(
-                cells: <DataCell>[
-                  DataCell(Text(stat.channel)),
-                  DataCell(Text(stat.operation)),
-                  DataCell(Text('${stat.totalCalls}')),
-                  DataCell(Text('${stat.errorCount}')),
-                  DataCell(Text('${stat.timeoutCount}')),
-                  DataCell(Text(stat.averageMicros.toStringAsFixed(1))),
-                  DataCell(Text('${stat.minMicros}')),
-                  DataCell(Text('${stat.maxMicros}')),
-                ],
-              ),
-            )
-            .toList(),
+        rows:
+            stats
+                .map(
+                  (stat) => DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text(stat.channel)),
+                      DataCell(Text(stat.operation)),
+                      DataCell(Text('${stat.totalCalls}')),
+                      DataCell(Text('${stat.errorCount}')),
+                      DataCell(Text('${stat.timeoutCount}')),
+                      DataCell(Text(stat.averageMicros.toStringAsFixed(1))),
+                      DataCell(Text('${stat.minMicros}')),
+                      DataCell(Text('${stat.maxMicros}')),
+                    ],
+                  ),
+                )
+                .toList(),
       ),
     );
   }

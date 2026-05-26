@@ -26,17 +26,10 @@ const BridgeDescriptor _descriptor = BridgeDescriptor(
     ),
   ],
   events: <BridgeEventDescriptor>[
-    BridgeEventDescriptor(
-      name: 'pulses',
-      payloadType: 'int',
-      replay: 2,
-    ),
+    BridgeEventDescriptor(name: 'pulses', payloadType: 'int', replay: 2),
   ],
   errors: <BridgeErrorDescriptor>[
-    BridgeErrorDescriptor(
-      code: 'custom_failure',
-      dartType: 'CustomFailure',
-    ),
+    BridgeErrorDescriptor(code: 'custom_failure', dartType: 'CustomFailure'),
   ],
 );
 
@@ -50,11 +43,12 @@ void main() {
   late BridgeInspector inspector;
 
   setUp(() {
-    inspector = BridgeInspector.instance
-      ..clear()
-      ..isEnabled = true
-      ..capturePayloads = false
-      ..vmServiceBroadcast = false;
+    inspector =
+        BridgeInspector.instance
+          ..clear()
+          ..isEnabled = true
+          ..capturePayloads = false
+          ..vmServiceBroadcast = false;
   });
 
   void registerMethodHandler(
@@ -62,9 +56,9 @@ void main() {
   ) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      const MethodChannel('nativeflow/test'),
-      handler,
-    );
+          const MethodChannel('nativeflow/test'),
+          handler,
+        );
   }
 
   tearDown(() {
@@ -79,10 +73,7 @@ void main() {
       return null;
     });
 
-    final client = BridgeClient(
-      descriptor: _descriptor,
-      inspector: inspector,
-    );
+    final client = BridgeClient(descriptor: _descriptor, inspector: inspector);
 
     final result = await client.invoke<String>('echo');
     expect(result, 'pong');
@@ -98,11 +89,10 @@ void main() {
     final client = BridgeClient(
       descriptor: _descriptor,
       inspector: inspector,
-      errorMapper: BridgeErrorMapper.fromDescriptor(_descriptor)
-        ..register(
-          'custom_failure',
-          (error, stackTrace) => const CustomFailure(),
-        ),
+      errorMapper: BridgeErrorMapper.fromDescriptor(_descriptor)..register(
+        'custom_failure',
+        (error, stackTrace) => const CustomFailure(),
+      ),
     );
 
     await expectLater(
@@ -119,16 +109,10 @@ void main() {
       return null;
     });
 
-    final client = BridgeClient(
-      descriptor: _descriptor,
-      inspector: inspector,
-    );
+    final client = BridgeClient(descriptor: _descriptor, inspector: inspector);
 
     await expectLater(
-      client.invoke<void>(
-        'slow',
-        timeout: const Duration(milliseconds: 5),
-      ),
+      client.invoke<void>('slow', timeout: const Duration(milliseconds: 5)),
       throwsA(isA<BridgeTimeoutException>()),
     );
     expect(inspector.timeline.last.status, BridgeOperationStatus.timeout);
@@ -138,10 +122,7 @@ void main() {
     inspector.capturePayloads = true;
     registerMethodHandler((call) async => 'pong');
 
-    final client = BridgeClient(
-      descriptor: _descriptor,
-      inspector: inspector,
-    );
+    final client = BridgeClient(descriptor: _descriptor, inspector: inspector);
 
     await client.invoke<String>('echo');
     final completed = inspector.timeline.last;
@@ -153,10 +134,7 @@ void main() {
     final redacted = redactor.redact(<String, Object?>{
       'orderId': 'ord_1',
       'apiToken': 'secret',
-      'card': <String, Object?>{
-        'pan': '4111111111111111',
-        'expiry': '12/30',
-      },
+      'card': <String, Object?>{'pan': '4111111111111111', 'expiry': '12/30'},
     });
     expect(redacted, <String, Object?>{
       'orderId': 'ord_1',

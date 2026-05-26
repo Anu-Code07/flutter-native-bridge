@@ -71,8 +71,8 @@ void main() {
 
   group('BridgeSerializerRegistry', () {
     test('delegates registered serializers', () {
-      final registry = BridgeSerializerRegistry()
-        ..register<int>(_DoubleIntSerializer());
+      final registry =
+          BridgeSerializerRegistry()..register<int>(_DoubleIntSerializer());
 
       expect(registry.serialize<int>(4), 8);
       expect(registry.deserialize<int>(10), 5);
@@ -83,8 +83,8 @@ void main() {
     });
 
     test('walks nested map/list payloads', () {
-      final registry = BridgeSerializerRegistry()
-        ..register<int>(_DoubleIntSerializer());
+      final registry =
+          BridgeSerializerRegistry()..register<int>(_DoubleIntSerializer());
       expect(
         registry.serializeValue(<String, Object?>{
           'items': <int>[1, 2, 3],

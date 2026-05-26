@@ -32,9 +32,9 @@ final class KycSession {
   final DateTime expiresAt;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'sessionId': sessionId,
-        'expiresAt': expiresAt.toIso8601String(),
-      };
+    'sessionId': sessionId,
+    'expiresAt': expiresAt.toIso8601String(),
+  };
 }
 
 final class KycResult {
@@ -56,11 +56,11 @@ final class KycStep {
 @BridgeError('kyc_cancelled')
 final class KycCancelledException extends BridgeException {
   const KycCancelledException()
-      : super('The customer cancelled the KYC flow.', code: 'kyc_cancelled');
+    : super('The customer cancelled the KYC flow.', code: 'kyc_cancelled');
 }
 
 @BridgeError('kyc_session_expired')
 final class KycSessionExpiredException extends BridgeException {
   const KycSessionExpiredException()
-      : super('The KYC session expired.', code: 'kyc_session_expired');
+    : super('The KYC session expired.', code: 'kyc_session_expired');
 }

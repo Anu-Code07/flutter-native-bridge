@@ -81,13 +81,14 @@ final class _$KycBridgeClient implements KycBridge {
   _$KycBridgeClient({
     BridgeClient? client,
     BridgeSerializerRegistry? serializers,
-  }) : _client = client ??
-            BridgeClient(
-              descriptor: _$KycBridgeDescriptor,
-              codec: const JsonBridgeCodec(),
-              serializers: serializers,
-              errorMapper: _buildErrorMapper(),
-            );
+  }) : _client =
+           client ??
+           BridgeClient(
+             descriptor: _$KycBridgeDescriptor,
+             codec: const JsonBridgeCodec(),
+             serializers: serializers,
+             errorMapper: _buildErrorMapper(),
+           );
 
   final BridgeClient _client;
 

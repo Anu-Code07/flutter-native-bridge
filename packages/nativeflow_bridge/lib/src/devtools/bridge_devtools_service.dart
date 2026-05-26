@@ -24,54 +24,54 @@ final class BridgeDevToolsService {
     _registered = true;
     final target = inspector ?? BridgeInspector.instance;
 
-    developer.registerExtension(
-      'ext.nativeflow_bridge.timeline',
-      (String method, Map<String, String> parameters) async {
-        return developer.ServiceExtensionResponse.result(target.exportJson());
-      },
-    );
+    developer.registerExtension('ext.nativeflow_bridge.timeline', (
+      String method,
+      Map<String, String> parameters,
+    ) async {
+      return developer.ServiceExtensionResponse.result(target.exportJson());
+    });
 
-    developer.registerExtension(
-      'ext.nativeflow_bridge.stats',
-      (String method, Map<String, String> parameters) async {
-        return developer.ServiceExtensionResponse.result(
-          _encode(target.stats.map((stat) => stat.toJson()).toList()),
-        );
-      },
-    );
+    developer.registerExtension('ext.nativeflow_bridge.stats', (
+      String method,
+      Map<String, String> parameters,
+    ) async {
+      return developer.ServiceExtensionResponse.result(
+        _encode(target.stats.map((stat) => stat.toJson()).toList()),
+      );
+    });
 
-    developer.registerExtension(
-      'ext.nativeflow_bridge.clear',
-      (String method, Map<String, String> parameters) async {
-        target.clear();
-        return developer.ServiceExtensionResponse.result('{"cleared": true}');
-      },
-    );
+    developer.registerExtension('ext.nativeflow_bridge.clear', (
+      String method,
+      Map<String, String> parameters,
+    ) async {
+      target.clear();
+      return developer.ServiceExtensionResponse.result('{"cleared": true}');
+    });
 
-    developer.registerExtension(
-      'ext.nativeflow_bridge.config',
-      (String method, Map<String, String> parameters) async {
-        final enabled = parameters['enabled'];
-        if (enabled != null) {
-          target.isEnabled = enabled == 'true';
-        }
-        final capturePayloads = parameters['capturePayloads'];
-        if (capturePayloads != null) {
-          target.capturePayloads = capturePayloads == 'true';
-        }
-        final broadcast = parameters['vmServiceBroadcast'];
-        if (broadcast != null) {
-          target.vmServiceBroadcast = broadcast == 'true';
-        }
-        return developer.ServiceExtensionResponse.result(
-          _encode(<String, Object?>{
-            'enabled': target.isEnabled,
-            'capturePayloads': target.capturePayloads,
-            'vmServiceBroadcast': target.vmServiceBroadcast,
-          }),
-        );
-      },
-    );
+    developer.registerExtension('ext.nativeflow_bridge.config', (
+      String method,
+      Map<String, String> parameters,
+    ) async {
+      final enabled = parameters['enabled'];
+      if (enabled != null) {
+        target.isEnabled = enabled == 'true';
+      }
+      final capturePayloads = parameters['capturePayloads'];
+      if (capturePayloads != null) {
+        target.capturePayloads = capturePayloads == 'true';
+      }
+      final broadcast = parameters['vmServiceBroadcast'];
+      if (broadcast != null) {
+        target.vmServiceBroadcast = broadcast == 'true';
+      }
+      return developer.ServiceExtensionResponse.result(
+        _encode(<String, Object?>{
+          'enabled': target.isEnabled,
+          'capturePayloads': target.capturePayloads,
+          'vmServiceBroadcast': target.vmServiceBroadcast,
+        }),
+      );
+    });
   }
 
   static String _encode(Object? value) => jsonEncode(value);

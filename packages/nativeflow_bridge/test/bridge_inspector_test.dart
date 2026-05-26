@@ -34,11 +34,12 @@ void main() {
     late BridgeInspector inspector;
 
     setUp(() {
-      inspector = BridgeInspector.instance
-        ..clear()
-        ..isEnabled = true
-        ..capturePayloads = false
-        ..vmServiceBroadcast = false;
+      inspector =
+          BridgeInspector.instance
+            ..clear()
+            ..isEnabled = true
+            ..capturePayloads = false
+            ..vmServiceBroadcast = false;
     });
 
     test('records started/terminal events and broadcasts them', () async {
@@ -58,9 +59,7 @@ void main() {
       for (var index = 0; index < 3; index++) {
         final started = _started(inspector, op: 'pay');
         inspector.record(started);
-        inspector.record(
-          _completed(started, micros: 1000 * (index + 1)),
-        );
+        inspector.record(_completed(started, micros: 1000 * (index + 1)));
       }
       final failedStart = _started(inspector, op: 'pay');
       inspector.record(failedStart);
@@ -97,9 +96,10 @@ void main() {
     });
 
     test('ring buffer is bounded by capacity', () {
-      final localInspector = BridgeInspector.instance
-        ..clear()
-        ..isEnabled = true;
+      final localInspector =
+          BridgeInspector.instance
+            ..clear()
+            ..isEnabled = true;
       for (var index = 0; index < localInspector.capacity + 10; index++) {
         localInspector.record(_started(localInspector));
       }

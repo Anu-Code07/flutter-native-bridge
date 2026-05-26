@@ -63,13 +63,14 @@ final class _$PaymentBridgeClient implements PaymentBridge {
   _$PaymentBridgeClient({
     BridgeClient? client,
     BridgeSerializerRegistry? serializers,
-  }) : _client = client ??
-            BridgeClient(
-              descriptor: _$PaymentBridgeDescriptor,
-              codec: const JsonBridgeCodec(),
-              serializers: serializers,
-              errorMapper: _buildErrorMapper(),
-            );
+  }) : _client =
+           client ??
+           BridgeClient(
+             descriptor: _$PaymentBridgeDescriptor,
+             codec: const JsonBridgeCodec(),
+             serializers: serializers,
+             errorMapper: _buildErrorMapper(),
+           );
 
   final BridgeClient _client;
 
