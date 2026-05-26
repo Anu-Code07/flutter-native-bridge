@@ -19,6 +19,16 @@ interface NativeFlowEventSource {
   fun onCancel(arguments: Any?)
 }
 
+/**
+ * Typed bridge error raised from native handlers. Maps to `@BridgeError`
+ * exceptions on the Dart side via [PlatformException.code].
+ */
+class NativeFlowBridgeError(
+  val code: String,
+  message: String,
+  val details: Any? = null,
+) : RuntimeException(message)
+
 class NativeFlowBridgeRuntime(
   private val messenger: BinaryMessenger,
 ) {
@@ -26,17 +36,34 @@ class NativeFlowBridgeRuntime(
   private val methodChannels = mutableMapOf<String, MethodChannel>()
   private val eventChannels = mutableMapOf<String, EventChannel>()
 
+  /**
+   * When `false` (the default in release builds) the runtime omits native
+   * stack traces and raw exception classes from cross-boundary error details
+   * for security and privacy.
+   */
+  var emitDebugErrorDetails: Boolean = BuildFlags.isDebug
+
   fun registerMethods(channelName: String, handler: NativeFlowMethodHandler) {
     val channel = MethodChannel(messenger, channelName)
     channel.setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
       scope.launch {
         try {
           result.success(handler.handle(call.method, call.arguments))
+        } catch (bridgeError: NativeFlowBridgeError) {
+          result.error(
+            bridgeError.code,
+            bridgeError.message ?: "Native bridge call failed.",
+            if (emitDebugErrorDetails) bridgeError.details else null,
+          )
         } catch (error: Throwable) {
           result.error(
             error::class.java.simpleName,
             error.message ?: "Native bridge call failed.",
-            mapOf("stackTrace" to error.stackTraceToString()),
+            if (emitDebugErrorDetails) {
+              mapOf("stackTrace" to error.stackTraceToString())
+            } else {
+              null
+            },
           )
         }
       }

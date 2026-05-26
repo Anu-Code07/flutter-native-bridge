@@ -1,9 +1,15 @@
 import 'model.dart';
 
+/// Common interface for per-platform native contract emitters.
+abstract interface class NativeContractEmitter {
+  String emit(BridgeContract contract);
+}
+
 /// Emits Kotlin interfaces implemented by Android plugin adapters.
-final class KotlinContractEmitter {
+final class KotlinContractEmitter implements NativeContractEmitter {
   const KotlinContractEmitter();
 
+  @override
   String emit(BridgeContract contract) {
     final buffer = StringBuffer()
       ..writeln('package nativeflow.generated')
@@ -30,6 +36,15 @@ final class KotlinContractEmitter {
     }
 
     buffer.writeln('}');
+
+    if (contract.errors.isNotEmpty) {
+      buffer.writeln();
+      buffer.writeln('object ${contract.name}Errors {');
+      for (final error in contract.errors) {
+        buffer.writeln('  const val ${_constName(error.code)} = "${error.code}"');
+      }
+      buffer.writeln('}');
+    }
     return buffer.toString();
   }
 
@@ -45,9 +60,10 @@ final class KotlinContractEmitter {
 }
 
 /// Emits Swift protocols implemented by iOS/macOS plugin adapters.
-final class SwiftContractEmitter {
+final class SwiftContractEmitter implements NativeContractEmitter {
   const SwiftContractEmitter();
 
+  @override
   String emit(BridgeContract contract) {
     final buffer = StringBuffer()
       ..writeln('import Combine')
@@ -73,6 +89,17 @@ final class SwiftContractEmitter {
     }
 
     buffer.writeln('}');
+
+    if (contract.errors.isNotEmpty) {
+      buffer.writeln();
+      buffer.writeln('enum ${contract.name}Errors {');
+      for (final error in contract.errors) {
+        buffer.writeln(
+          '  static let ${_camelCase(error.code)} = "${error.code}"',
+        );
+      }
+      buffer.writeln('}');
+    }
     return buffer.toString();
   }
 
@@ -85,6 +112,67 @@ final class SwiftContractEmitter {
     'Uint8List' => 'Data',
     _ => '[String: Any?]',
   };
+}
+
+/// Emits a C++ handler stub for Windows plugins.
+final class WindowsCppContractEmitter implements NativeContractEmitter {
+  const WindowsCppContractEmitter();
+
+  @override
+  String emit(BridgeContract contract) {
+    final buffer = StringBuffer()
+      ..writeln('// Auto-generated NativeFlow Bridge Windows contract.')
+      ..writeln('#pragma once')
+      ..writeln()
+      ..writeln('#include <flutter/encodable_value.h>')
+      ..writeln('#include <flutter/method_call.h>')
+      ..writeln('#include <flutter/method_result.h>')
+      ..writeln('#include <memory>')
+      ..writeln('#include <string>')
+      ..writeln()
+      ..writeln('namespace nativeflow_generated {')
+      ..writeln()
+      ..writeln('class ${contract.name}NativeBridge {')
+      ..writeln(' public:')
+      ..writeln('  virtual ~${contract.name}NativeBridge() = default;');
+    for (final method in contract.methods) {
+      buffer.writeln(
+        '  virtual void ${method.name}(const flutter::EncodableValue& arguments, '
+        'std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) = 0;',
+      );
+    }
+    buffer
+      ..writeln('};')
+      ..writeln()
+      ..writeln('} // namespace nativeflow_generated');
+    return buffer.toString();
+  }
+}
+
+/// Emits a C++ handler stub for Linux plugins.
+final class LinuxCppContractEmitter implements NativeContractEmitter {
+  const LinuxCppContractEmitter();
+
+  @override
+  String emit(BridgeContract contract) {
+    final buffer = StringBuffer()
+      ..writeln('// Auto-generated NativeFlow Bridge Linux contract.')
+      ..writeln('#pragma once')
+      ..writeln()
+      ..writeln('#include <flutter_linux/flutter_linux.h>')
+      ..writeln()
+      ..writeln('typedef struct {')
+      ..writeln('  const gchar* channel;');
+    for (final method in contract.methods) {
+      buffer.writeln(
+        '  void (*${method.name})(FlMethodCall* call, FlMethodChannel* channel, gpointer user_data);',
+      );
+    }
+    buffer
+      ..writeln('} ${contract.name}NativeBridge;')
+      ..writeln();
+    return buffer.toString();
+  }
 }
 
 String _streamPayload(String returnType, String Function(String) mapper) {
@@ -104,4 +192,21 @@ String _normalizeType(String dartType) {
       .replaceAll('?', '')
       .replaceAll('>', '')
       .trim();
+}
+
+String _constName(String code) {
+  return code.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]+'), '_');
+}
+
+String _camelCase(String value) {
+  final parts = value.split(RegExp(r'[^A-Za-z0-9]+'));
+  if (parts.isEmpty) {
+    return value;
+  }
+  final first = parts.first.toLowerCase();
+  final rest = parts.skip(1).map((part) {
+    if (part.isEmpty) return '';
+    return part[0].toUpperCase() + part.substring(1).toLowerCase();
+  });
+  return ([first, ...rest]).join();
 }

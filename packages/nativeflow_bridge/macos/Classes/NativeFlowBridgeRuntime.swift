@@ -1,4 +1,4 @@
-import Flutter
+import FlutterMacOS
 import Foundation
 
 public protocol NativeFlowMethodHandler {
@@ -15,9 +15,8 @@ public final class NativeFlowBridgeRuntime {
   private var methodChannels: [String: FlutterMethodChannel] = [:]
   private var eventChannels: [String: FlutterEventChannel] = [:]
 
-  /// When `false` (the default in release) the runtime omits native stack
-  /// traces and raw exception descriptions from cross-boundary error details
-  /// for security and privacy.
+  /// When `false` (default in release) the runtime omits stack traces and
+  /// native exception descriptions from cross-boundary error details.
   public var emitDebugErrorDetails: Bool = {
     #if DEBUG
     return true

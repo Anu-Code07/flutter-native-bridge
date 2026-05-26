@@ -11,6 +11,15 @@ final class BridgeDescriptor {
     required this.version,
     required this.methods,
     this.events = const <BridgeEventDescriptor>[],
+    this.errors = const <BridgeErrorDescriptor>[],
+    this.codec = BridgeCodecKind.identity,
+    this.platforms = const <BridgePlatformTarget>[
+      BridgePlatformTarget.android,
+      BridgePlatformTarget.ios,
+      BridgePlatformTarget.macos,
+      BridgePlatformTarget.windows,
+      BridgePlatformTarget.linux,
+    ],
   });
 
   final String name;
@@ -18,13 +27,19 @@ final class BridgeDescriptor {
   final int version;
   final List<BridgeMethodDescriptor> methods;
   final List<BridgeEventDescriptor> events;
+  final List<BridgeErrorDescriptor> errors;
+  final BridgeCodecKind codec;
+  final List<BridgePlatformTarget> platforms;
 
   Map<String, Object?> toJson() => <String, Object?>{
     'name': name,
     'channel': channel,
     'version': version,
+    'codec': codec.name,
+    'platforms': platforms.map((platform) => platform.name).toList(),
     'methods': methods.map((method) => method.toJson()).toList(),
     'events': events.map((event) => event.toJson()).toList(),
+    'errors': errors.map((error) => error.toJson()).toList(),
   };
 }
 
@@ -94,5 +109,22 @@ final class BridgeParameterDescriptor {
     'type': type,
     'isRequired': isRequired,
     'isNullable': isNullable,
+  };
+}
+
+/// Metadata for a `@BridgeError`-annotated exception type.
+@immutable
+final class BridgeErrorDescriptor {
+  const BridgeErrorDescriptor({required this.code, required this.dartType});
+
+  /// Native error `code` reported via [PlatformException.code].
+  final String code;
+
+  /// Dart exception class that should be raised for [code].
+  final String dartType;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'code': code,
+    'dartType': dartType,
   };
 }
