@@ -83,7 +83,8 @@ void main() {
       final started = _started(inspector);
       inspector.record(started);
       inspector.record(_completed(started));
-      final decoded = jsonDecode(inspector.exportJson()) as Map<String, Object?>;
+      final decoded =
+          jsonDecode(inspector.exportJson()) as Map<String, Object?>;
       expect(decoded['version'], 1);
       expect((decoded['events']! as List<Object?>), hasLength(1));
       expect((decoded['stats']! as List<Object?>), hasLength(1));

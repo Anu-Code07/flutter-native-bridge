@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nativeflow_bridge/core.dart';
@@ -62,13 +60,11 @@ void main() {
   void registerMethodHandler(
     Future<Object?>? Function(MethodCall call) handler,
   ) {
-    TestDefaultBinaryMessengerBinding
-        .instance
-        .defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-          const MethodChannel('nativeflow/test'),
-          handler,
-        );
+      const MethodChannel('nativeflow/test'),
+      handler,
+    );
   }
 
   tearDown(() {
@@ -148,8 +144,7 @@ void main() {
     );
 
     await client.invoke<String>('echo');
-    final completed =
-        inspector.timeline.last;
+    final completed = inspector.timeline.last;
     expect(completed.responsePreview, 'pong');
   });
 

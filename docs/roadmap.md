@@ -1,25 +1,32 @@
 # Roadmap
 
-## Runtime hardening
+NativeFlow Bridge 1.0.0 is the first production release. This page tracks
+work landing after 1.0.
 
-- serializer-generated `fromJson` and `toJson` adapters
-- protobuf and binary codec packages
-- typed exception mapping per bridge contract
-- lifecycle-aware stream reconnection policies
-- platform permission adapters
+## Runtime extensions
 
-## Native code generation
+- Protobuf and binary codec packages (current codecs: identity, JSON).
+- Native file emission into Android / iOS source sets (today contracts are
+  emitted as strings inside `.g.dart`).
+- Encrypted bridge transport for sensitive payloads.
+- Hot-swappable bridge plugins for A/B and gradual rollout.
 
-- write Kotlin files into Android source sets
-- write Swift files into iOS/macOS source sets
-- generate Windows/Linux C++ handler stubs
-- expose deterministic generated-file manifests for CI
+## DevTools
 
-## Enterprise extensions
+- Standalone NativeFlow Bridge DevTools extension (`devtools_extensions`)
+  consuming the existing `ext.nativeflow_bridge.*` service extensions.
+- Built-in CSV / HAR export.
+- Per-bridge metrics dashboards.
 
-- encrypted bridge transport
-- remote bridge execution over WebSockets
-- hot-swappable bridge plugins
-- bridge DevTools payload debugger
-- AI-assisted native SDK wrapper generation
-- WASM and Rust-first bridge targets
+## Native parity
+
+- Generated handler stubs (Kotlin / Swift / C++ / C) automatically wired
+  into platform source sets.
+- AI-assisted native SDK wrapper generation for common SDKs.
+- WASM and Rust-first bridge targets.
+
+## Quality
+
+- Coverage upload to Codecov on every CI run.
+- Native build + smoke test on Android, iOS, macOS, Windows, Linux runners.
+- Compatibility matrix tests for old Flutter releases.

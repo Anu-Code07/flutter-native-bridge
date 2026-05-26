@@ -41,7 +41,8 @@ final class KotlinContractEmitter implements NativeContractEmitter {
       buffer.writeln();
       buffer.writeln('object ${contract.name}Errors {');
       for (final error in contract.errors) {
-        buffer.writeln('  const val ${_constName(error.code)} = "${error.code}"');
+        buffer
+            .writeln('  const val ${_constName(error.code)} = "${error.code}"');
       }
       buffer.writeln('}');
     }
@@ -49,14 +50,14 @@ final class KotlinContractEmitter implements NativeContractEmitter {
   }
 
   String _kotlinType(String dartType) => switch (_normalizeType(dartType)) {
-    'void' => 'Unit',
-    'bool' => 'Boolean',
-    'int' => 'Long',
-    'double' => 'Double',
-    'String' => 'String',
-    'Uint8List' => 'ByteArray',
-    _ => 'Map<String, Any?>',
-  };
+        'void' => 'Unit',
+        'bool' => 'Boolean',
+        'int' => 'Long',
+        'double' => 'Double',
+        'String' => 'String',
+        'Uint8List' => 'ByteArray',
+        _ => 'Map<String, Any?>',
+      };
 }
 
 /// Emits Swift protocols implemented by iOS/macOS plugin adapters.
@@ -104,14 +105,14 @@ final class SwiftContractEmitter implements NativeContractEmitter {
   }
 
   String _swiftType(String dartType) => switch (_normalizeType(dartType)) {
-    'void' => 'Void',
-    'bool' => 'Bool',
-    'int' => 'Int64',
-    'double' => 'Double',
-    'String' => 'String',
-    'Uint8List' => 'Data',
-    _ => '[String: Any?]',
-  };
+        'void' => 'Void',
+        'bool' => 'Bool',
+        'int' => 'Int64',
+        'double' => 'Double',
+        'String' => 'String',
+        'Uint8List' => 'Data',
+        _ => '[String: Any?]',
+      };
 }
 
 /// Emits a C++ handler stub for Windows plugins.

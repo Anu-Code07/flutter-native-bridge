@@ -5,7 +5,7 @@
 /// marker. Non-`Map`/`Iterable` payloads pass through untouched.
 final class BridgePayloadRedactor {
   BridgePayloadRedactor({Set<Pattern>? sensitiveKeys})
-    : _sensitiveKeys = sensitiveKeys ?? _defaultSensitiveKeys;
+      : _sensitiveKeys = sensitiveKeys ?? _defaultSensitiveKeys;
 
   static const String redacted = '[REDACTED]';
 

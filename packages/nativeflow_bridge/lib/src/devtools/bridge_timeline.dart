@@ -93,23 +93,23 @@ final class BridgeTimelineEvent {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'id': id,
-    'bridge': bridge,
-    'channel': channel,
-    'operation': operation,
-    'kind': kind.name,
-    'status': status.name,
-    'startedAt': startedAt.toUtc().toIso8601String(),
-    'completedAt': completedAt?.toUtc().toIso8601String(),
-    'durationMicros': duration?.inMicroseconds,
-    'requestBytes': requestBytes,
-    'responseBytes': responseBytes,
-    'errorCode': errorCode,
-    'errorMessage': errorMessage,
-    'transport': transport,
-    if (requestPreview != null) 'requestPreview': requestPreview,
-    if (responsePreview != null) 'responsePreview': responsePreview,
-  };
+        'id': id,
+        'bridge': bridge,
+        'channel': channel,
+        'operation': operation,
+        'kind': kind.name,
+        'status': status.name,
+        'startedAt': startedAt.toUtc().toIso8601String(),
+        'completedAt': completedAt?.toUtc().toIso8601String(),
+        'durationMicros': duration?.inMicroseconds,
+        'requestBytes': requestBytes,
+        'responseBytes': responseBytes,
+        'errorCode': errorCode,
+        'errorMessage': errorMessage,
+        'transport': transport,
+        if (requestPreview != null) 'requestPreview': requestPreview,
+        if (responsePreview != null) 'responsePreview': responsePreview,
+      };
 }
 
 /// Bounded in-memory ring buffer of recent [BridgeTimelineEvent]s.
@@ -176,18 +176,18 @@ final class BridgeOperationStats {
   double get errorRate => totalCalls == 0 ? 0 : errorCount / totalCalls;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'bridge': bridge,
-    'channel': channel,
-    'operation': operation,
-    'kind': kind.name,
-    'totalCalls': totalCalls,
-    'errorCount': errorCount,
-    'timeoutCount': timeoutCount,
-    'minMicros': minMicros,
-    'maxMicros': maxMicros,
-    'averageMicros': averageMicros,
-    'errorRate': errorRate,
-  };
+        'bridge': bridge,
+        'channel': channel,
+        'operation': operation,
+        'kind': kind.name,
+        'totalCalls': totalCalls,
+        'errorCount': errorCount,
+        'timeoutCount': timeoutCount,
+        'minMicros': minMicros,
+        'maxMicros': maxMicros,
+        'averageMicros': averageMicros,
+        'errorRate': errorRate,
+      };
 }
 
 /// Aggregates [BridgeTimelineEvent]s into per-operation statistics.
@@ -260,17 +260,17 @@ class _MutableStats {
   }
 
   BridgeOperationStats toImmutable() => BridgeOperationStats(
-    bridge: bridge,
-    channel: channel,
-    operation: operation,
-    kind: kind,
-    totalCalls: totalCalls,
-    errorCount: errorCount,
-    timeoutCount: timeoutCount,
-    minMicros: minMicros,
-    maxMicros: maxMicros,
-    totalMicros: totalMicros,
-  );
+        bridge: bridge,
+        channel: channel,
+        operation: operation,
+        kind: kind,
+        totalCalls: totalCalls,
+        errorCount: errorCount,
+        timeoutCount: timeoutCount,
+        minMicros: minMicros,
+        maxMicros: maxMicros,
+        totalMicros: totalMicros,
+      );
 }
 
 /// Singleton observer used by [BridgeClient] to publish bridge activity.
@@ -281,7 +281,7 @@ class _MutableStats {
 /// unless the application opts in.
 final class BridgeInspector {
   BridgeInspector._({this.capacity = 500})
-    : _timeline = BridgeTimeline(capacity: capacity);
+      : _timeline = BridgeTimeline(capacity: capacity);
 
   /// Shared inspector used by [BridgeClient] when no custom inspector is
   /// injected.
@@ -360,13 +360,13 @@ final class BridgeInspector {
 
   /// Exports the current timeline + stats as a HAR-like JSON document.
   Map<String, Object?> export() => <String, Object?>{
-    'version': 1,
-    'capacity': capacity,
-    'enabled': _enabled,
-    'capturePayloads': _capturePayloads,
-    'events': _timeline.events.map((event) => event.toJson()).toList(),
-    'stats': _stats.snapshot().map((stats) => stats.toJson()).toList(),
-  };
+        'version': 1,
+        'capacity': capacity,
+        'enabled': _enabled,
+        'capturePayloads': _capturePayloads,
+        'events': _timeline.events.map((event) => event.toJson()).toList(),
+        'stats': _stats.snapshot().map((stats) => stats.toJson()).toList(),
+      };
 
   /// Convenience for `jsonEncode(export())`.
   String exportJson() => jsonEncode(export());

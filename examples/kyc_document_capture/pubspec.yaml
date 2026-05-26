@@ -1,5 +1,5 @@
-name: nativeflow_ai_image_processor
-description: Example FFI image processor bridge built with NativeFlow Bridge.
+name: nativeflow_kyc_document_capture
+description: Example KYC document capture bridge built with NativeFlow Bridge.
 publish_to: none
 
 environment:

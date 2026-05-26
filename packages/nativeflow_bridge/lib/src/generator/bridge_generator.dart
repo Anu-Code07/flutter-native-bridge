@@ -84,7 +84,8 @@ $output
         continue;
       }
       bindings.add(
-        BridgeErrorBinding(dartType: element.name ?? 'UnknownError', code: code),
+        BridgeErrorBinding(
+            dartType: element.name ?? 'UnknownError', code: code),
       );
     }
     return bindings;
@@ -104,8 +105,7 @@ $output
 
     final reader = ConstantReader(annotation);
     final className = element.name ?? 'AnonymousBridge';
-    final channel =
-        reader.read('channel').literalValue as String? ??
+    final channel = reader.read('channel').literalValue as String? ??
         _defaultChannelName(className);
     final version = reader.read('version').intValue;
     final codec = _readEnumName(reader, 'codec') ?? 'json';
@@ -133,8 +133,7 @@ $output
     final returnType = _typeName(method.returnType);
     final eventAnnotation = _eventChecker.firstAnnotationOf(method);
     final methodAnnotation = _methodChecker.firstAnnotationOf(method);
-    final operationName =
-        _readNameOverride(eventAnnotation) ??
+    final operationName = _readNameOverride(eventAnnotation) ??
         _readNameOverride(methodAnnotation) ??
         method.name ??
         'anonymousMethod';
@@ -142,7 +141,7 @@ $output
     final transport = methodAnnotation == null
         ? 'methodChannel'
         : _readEnumName(ConstantReader(methodAnnotation), 'transport') ??
-              'methodChannel';
+            'methodChannel';
 
     final replay = eventAnnotation == null
         ? 0
@@ -449,15 +448,14 @@ $transportCall
   String _emitFfiClient(FfiBridgeContract contract) {
     final descriptorName = r'_$' '${contract.name}FfiDescriptor';
     final clientName = r'_$' '${contract.name}Client';
-    final symbolPrefix = contract.symbolPrefix == null
-        ? "''"
-        : "'${contract.symbolPrefix}'";
-    final libraryLiteral = contract.library == null
-        ? 'null'
-        : "'${contract.library}'";
+    final symbolPrefix =
+        contract.symbolPrefix == null ? "''" : "'${contract.symbolPrefix}'";
+    final libraryLiteral =
+        contract.library == null ? 'null' : "'${contract.library}'";
 
     final buffer = StringBuffer()
-      ..writeln('const Map<String, Object?> $descriptorName = <String, Object?>{')
+      ..writeln(
+          'const Map<String, Object?> $descriptorName = <String, Object?>{')
       ..writeln("  'name': '${contract.name}',")
       ..writeln("  'library': $libraryLiteral,")
       ..writeln("  'symbolPrefix': $symbolPrefix,")
@@ -525,7 +523,8 @@ $transportCall
 
   String _emitFfiMethod(FfiBridgeMethod method) {
     final parameters = _formalParameterList(method.parameters);
-    final positional = method.parameters.map((parameter) => parameter.name).toList();
+    final positional =
+        method.parameters.map((parameter) => parameter.name).toList();
     return '''
   @override
   ${method.returnType} ${method.name}($parameters) {
@@ -543,10 +542,10 @@ $transportCall
   }
 
   String _ffiExecutor(String threading) => switch (threading) {
-    'main' => 'const InlineNativeExecutor()',
-    'isolate' => 'const IsolateNativeExecutor()',
-    _ => 'const IsolateNativeExecutor()',
-  };
+        'main' => 'const InlineNativeExecutor()',
+        'isolate' => 'const IsolateNativeExecutor()',
+        _ => 'const IsolateNativeExecutor()',
+      };
 
   String _formalParameterList(List<BridgeParameter> parameters) {
     if (parameters.isEmpty) {
@@ -559,8 +558,8 @@ $transportCall
       final declaration = '${parameter.type} ${parameter.name}';
       final defaultSuffix =
           parameter.defaultValueCode == null || parameter.isRequired
-          ? ''
-          : ' = ${parameter.defaultValueCode}';
+              ? ''
+              : ' = ${parameter.defaultValueCode}';
       if (parameter.isNamed) {
         if (parameter.isRequired) {
           named.add('required $declaration');
@@ -590,19 +589,17 @@ $transportCall
     if (parameters.isEmpty) {
       return 'null';
     }
-    final entries = parameters
-        .map((parameter) {
-          return "'${parameter.name}': ${parameter.name}";
-        })
-        .join(', ');
+    final entries = parameters.map((parameter) {
+      return "'${parameter.name}': ${parameter.name}";
+    }).join(', ');
     return '<String, Object?>{$entries}';
   }
 
   String _codecExpression(String codec) => switch (codec) {
-    'json' => 'const JsonBridgeCodec()',
-    'identity' => 'const IdentityBridgeCodec()',
-    _ => 'const IdentityBridgeCodec()',
-  };
+        'json' => 'const JsonBridgeCodec()',
+        'identity' => 'const IdentityBridgeCodec()',
+        _ => 'const IdentityBridgeCodec()',
+      };
 
   String _typeName(DartType type) {
     return type.getDisplayString();

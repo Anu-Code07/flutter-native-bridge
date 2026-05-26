@@ -30,14 +30,15 @@ final class BridgeClient {
     BridgeErrorMapper? errorMapper,
     BridgePayloadRedactor? redactor,
   }) : this._(
-         descriptor: descriptor,
-         codec: codec,
-         serializers: serializers ?? BridgeSerializerRegistry(),
-         binaryMessenger: binaryMessenger,
-         inspector: inspector ?? BridgeInspector.instance,
-         errorMapper: errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor),
-         redactor: redactor ?? BridgePayloadRedactor(),
-       );
+          descriptor: descriptor,
+          codec: codec,
+          serializers: serializers ?? BridgeSerializerRegistry(),
+          binaryMessenger: binaryMessenger,
+          inspector: inspector ?? BridgeInspector.instance,
+          errorMapper:
+              errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor),
+          redactor: redactor ?? BridgePayloadRedactor(),
+        );
 
   BridgeClient._({
     required this.descriptor,
@@ -47,29 +48,29 @@ final class BridgeClient {
     required BridgeErrorMapper errorMapper,
     required BridgePayloadRedactor redactor,
     BinaryMessenger? binaryMessenger,
-  }) : _codec = codec,
-       _serializers = serializers,
-       _inspector = inspector,
-       _errorMapper = errorMapper,
-       _redactor = redactor,
-       _methodChannel = MethodChannel(
-         descriptor.channel,
-         const StandardMethodCodec(),
-         binaryMessenger,
-       ),
-       _messageChannel = BasicMessageChannel<Object?>(
-         '${descriptor.channel}/messages',
-         const StandardMessageCodec(),
-         binaryMessenger: binaryMessenger,
-       ),
-       _eventStreams = BridgeEventStreamRegistry(
-         descriptor: descriptor,
-         codec: codec,
-         serializers: serializers,
-         binaryMessenger: binaryMessenger,
-         inspector: inspector,
-         errorMapper: errorMapper,
-       );
+  })  : _codec = codec,
+        _serializers = serializers,
+        _inspector = inspector,
+        _errorMapper = errorMapper,
+        _redactor = redactor,
+        _methodChannel = MethodChannel(
+          descriptor.channel,
+          const StandardMethodCodec(),
+          binaryMessenger,
+        ),
+        _messageChannel = BasicMessageChannel<Object?>(
+          '${descriptor.channel}/messages',
+          const StandardMessageCodec(),
+          binaryMessenger: binaryMessenger,
+        ),
+        _eventStreams = BridgeEventStreamRegistry(
+          descriptor: descriptor,
+          codec: codec,
+          serializers: serializers,
+          binaryMessenger: binaryMessenger,
+          inspector: inspector,
+          errorMapper: errorMapper,
+        );
 
   final BridgeDescriptor descriptor;
   final BridgeCodec _codec;

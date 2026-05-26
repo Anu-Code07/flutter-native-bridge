@@ -32,15 +32,15 @@ final class BridgeDescriptor {
   final List<BridgePlatformTarget> platforms;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'name': name,
-    'channel': channel,
-    'version': version,
-    'codec': codec.name,
-    'platforms': platforms.map((platform) => platform.name).toList(),
-    'methods': methods.map((method) => method.toJson()).toList(),
-    'events': events.map((event) => event.toJson()).toList(),
-    'errors': errors.map((error) => error.toJson()).toList(),
-  };
+        'name': name,
+        'channel': channel,
+        'version': version,
+        'codec': codec.name,
+        'platforms': platforms.map((platform) => platform.name).toList(),
+        'methods': methods.map((method) => method.toJson()).toList(),
+        'events': events.map((event) => event.toJson()).toList(),
+        'errors': errors.map((error) => error.toJson()).toList(),
+      };
 }
 
 @immutable
@@ -60,12 +60,13 @@ final class BridgeMethodDescriptor {
   final int? timeoutMilliseconds;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'name': name,
-    'returnType': returnType,
-    'transport': transport.name,
-    'timeoutMilliseconds': timeoutMilliseconds,
-    'parameters': parameters.map((parameter) => parameter.toJson()).toList(),
-  };
+        'name': name,
+        'returnType': returnType,
+        'transport': transport.name,
+        'timeoutMilliseconds': timeoutMilliseconds,
+        'parameters':
+            parameters.map((parameter) => parameter.toJson()).toList(),
+      };
 }
 
 @immutable
@@ -83,11 +84,11 @@ final class BridgeEventDescriptor {
   final int bufferSize;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'name': name,
-    'payloadType': payloadType,
-    'replay': replay,
-    'bufferSize': bufferSize,
-  };
+        'name': name,
+        'payloadType': payloadType,
+        'replay': replay,
+        'bufferSize': bufferSize,
+      };
 }
 
 @immutable
@@ -105,11 +106,11 @@ final class BridgeParameterDescriptor {
   final bool isNullable;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'name': name,
-    'type': type,
-    'isRequired': isRequired,
-    'isNullable': isNullable,
-  };
+        'name': name,
+        'type': type,
+        'isRequired': isRequired,
+        'isNullable': isNullable,
+      };
 }
 
 /// Metadata for a `@BridgeError`-annotated exception type.
@@ -124,7 +125,7 @@ final class BridgeErrorDescriptor {
   final String dartType;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'code': code,
-    'dartType': dartType,
-  };
+        'code': code,
+        'dartType': dartType,
+      };
 }

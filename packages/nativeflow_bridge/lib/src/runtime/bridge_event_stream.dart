@@ -16,12 +16,13 @@ final class BridgeEventStreamRegistry {
     BinaryMessenger? binaryMessenger,
     BridgeInspector? inspector,
     BridgeErrorMapper? errorMapper,
-  }) : _descriptor = descriptor,
-       _codec = codec,
-       _serializers = serializers,
-       _binaryMessenger = binaryMessenger,
-       _inspector = inspector,
-       _errorMapper = errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor);
+  })  : _descriptor = descriptor,
+        _codec = codec,
+        _serializers = serializers,
+        _binaryMessenger = binaryMessenger,
+        _inspector = inspector,
+        _errorMapper =
+            errorMapper ?? BridgeErrorMapper.fromDescriptor(descriptor);
 
   final BridgeDescriptor _descriptor;
   final BridgeCodec _codec;
@@ -79,13 +80,13 @@ class _SharedEventStream {
     required this.reconnectDelay,
     BinaryMessenger? binaryMessenger,
     BridgeInspector? inspector,
-  }) : _channel = EventChannel(
-         channelName,
-         const StandardMethodCodec(),
-         binaryMessenger,
-       ),
-       _eventDescriptor = eventDescriptor,
-       _inspector = inspector;
+  })  : _channel = EventChannel(
+          channelName,
+          const StandardMethodCodec(),
+          binaryMessenger,
+        ),
+        _eventDescriptor = eventDescriptor,
+        _inspector = inspector;
 
   final String channelName;
   final String bridgeName;
@@ -155,7 +156,7 @@ class _SharedEventStream {
         final inspector = _inspector;
         if (inspector != null) {
           inspector.record(
-              BridgeTimelineEvent(
+            BridgeTimelineEvent(
               id: inspector.nextId(),
               bridge: bridgeName,
               channel: channelName,
@@ -166,9 +167,8 @@ class _SharedEventStream {
               completedAt: DateTime.now(),
               errorCode:
                   error is PlatformException ? error.code : 'event_error',
-              errorMessage: error is PlatformException
-                  ? error.message
-                  : error.toString(),
+              errorMessage:
+                  error is PlatformException ? error.message : error.toString(),
               transport: 'eventChannel',
             ),
           );

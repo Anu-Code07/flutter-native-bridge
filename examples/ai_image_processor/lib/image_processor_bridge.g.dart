@@ -6,7 +6,7 @@ part of 'image_processor_bridge.dart';
 // BridgeContractGenerator
 // **************************************************************************
 
-// ignore_for_file: unused_element, unnecessary_cast, unused_import, unused_field
+// ignore_for_file: unused_element, unnecessary_cast, unused_import, unused_field, require_trailing_commas
 
 const Map<String, Object?> _$ImageProcessorBridgeFfiDescriptor =
     <String, Object?>{

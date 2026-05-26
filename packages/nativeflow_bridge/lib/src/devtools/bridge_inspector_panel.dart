@@ -151,7 +151,9 @@ class _Header extends StatelessWidget {
             IconButton(
               tooltip: 'Toggle payload capture',
               icon: Icon(
-                inspector.capturePayloads ? Icons.visibility : Icons.visibility_off,
+                inspector.capturePayloads
+                    ? Icons.visibility
+                    : Icons.visibility_off,
               ),
               onPressed: () {
                 inspector.capturePayloads = !inspector.capturePayloads;
@@ -290,9 +292,7 @@ class _DetailView extends StatelessWidget {
       _DetailRow('Completed', event.completedAt?.toIso8601String() ?? '—'),
       _DetailRow(
         'Duration',
-        event.duration == null
-            ? '—'
-            : '${event.duration!.inMicroseconds} µs',
+        event.duration == null ? '—' : '${event.duration!.inMicroseconds} µs',
       ),
       _DetailRow('Request bytes', '${event.requestBytes ?? 0}'),
       _DetailRow('Response bytes', '${event.responseBytes ?? 0}'),

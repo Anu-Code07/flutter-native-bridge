@@ -24,6 +24,7 @@ void main() {
   print('  payment_bridge_example.dart  — fintech / checkout SDK');
   print('  ble_bridge_example.dart      — device telemetry streams');
   print('  ffi_bridge_example.dart      — C/C++ native library');
+  print('  inspector_example.dart       — DevTools inspector + redactor');
   print('');
   print('See example/README.md and package README on pub.dev.');
 }

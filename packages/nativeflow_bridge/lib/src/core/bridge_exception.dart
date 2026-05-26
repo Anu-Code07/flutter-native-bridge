@@ -17,11 +17,11 @@ class BridgeException implements Exception {
   final StackTrace? stackTrace;
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'code': code,
-    'message': message,
-    'details': details,
-    'platform': platform,
-  };
+        'code': code,
+        'message': message,
+        'details': details,
+        'platform': platform,
+      };
 
   @override
   String toString() => 'BridgeException($code): $message';
@@ -51,7 +51,7 @@ final class BridgeSerializationException extends BridgeException {
 /// Error raised when a bridge endpoint cannot be found or registered.
 final class BridgeRegistrationException extends BridgeException {
   const BridgeRegistrationException(super.message)
-    : super(code: 'registration_error');
+      : super(code: 'registration_error');
 }
 
 /// Error raised when a bridge call exceeds its configured timeout.

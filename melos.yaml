@@ -17,14 +17,30 @@ scripts:
     description: Run package tests.
     run: melos exec --dir-exists=test -- "dart test"
 
+  test:flutter:
+    description: Run flutter tests for packages that depend on Flutter.
+    run: melos exec --depends-on=flutter --dir-exists=test -- "flutter test"
+
   format:
-    description: Format Dart sources.
+    description: Format Dart sources (CI-safe).
     run: melos exec -- "dart format --set-exit-if-changed ."
+
+  format:fix:
+    description: Format Dart sources in place.
+    run: melos exec -- "dart format ."
 
   generate:
     description: Run build_runner in packages that use code generation.
     run: melos exec --depends-on=build_runner -- "dart run build_runner build"
 
-    native:check:
-      description: Validate native platform folders exist on the published package.
-      run: melos exec --scope="nativeflow_bridge" -- "test -d android && test -d ios"
+  generate:diff:
+    description: Regenerate then fail if anything changed.
+    run: melos run generate && git diff --exit-code
+
+  native:check:
+    description: Validate native platform folders exist on the published package.
+    run: melos exec --scope="nativeflow_bridge" -- "test -d android && test -d ios && test -d macos && test -d windows && test -d linux"
+
+  pub:dry-run:
+    description: pub publish dry run on the published package.
+    run: dart pub -C packages/nativeflow_bridge publish --dry-run

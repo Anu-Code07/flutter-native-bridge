@@ -10,9 +10,9 @@ abstract interface class BridgeSerializer<T> {
 /// Registry used by generated code for custom and nested serializers.
 final class BridgeSerializerRegistry {
   BridgeSerializerRegistry([Map<Type, BridgeSerializer<Object?>>? serializers])
-    : _serializers = Map<Type, BridgeSerializer<Object?>>.of(
-        serializers ?? const <Type, BridgeSerializer<Object?>>{},
-      );
+      : _serializers = Map<Type, BridgeSerializer<Object?>>.of(
+          serializers ?? const <Type, BridgeSerializer<Object?>>{},
+        );
 
   final Map<Type, BridgeSerializer<Object?>> _serializers;
 
