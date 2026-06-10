@@ -38,7 +38,7 @@ jobs:
         run: flutter test --coverage
       - name: Upload coverage
         if: matrix.flutter-version == '3.44.0'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: packages/nativeflow_bridge/coverage/lcov.info
