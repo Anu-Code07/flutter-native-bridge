@@ -28,3 +28,36 @@ void nativeflow_bridge_linux_plugin_register_with_registrar(
           g_object_new(nativeflow_bridge_linux_plugin_get_type(), nullptr));
   g_object_ref_sink(plugin);
 }
+
+FlMethodChannel* nativeflow_bridge_linux_register_method_channel(
+    FlPluginRegistrar* registrar,
+    const gchar* channel_name,
+    FlMethodChannelMethodCallHandler handler,
+    gpointer user_data,
+    GDestroyNotify destroy_notify) {
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  FlMethodChannel* channel = fl_method_channel_new(
+      fl_plugin_registrar_get_messenger(registrar),
+      channel_name,
+      FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(channel, handler, user_data,
+                                            destroy_notify);
+  return channel;
+}
+
+FlEventChannel* nativeflow_bridge_linux_register_event_channel(
+    FlPluginRegistrar* registrar,
+    const gchar* channel_name,
+    FlEventChannelStreamHandlerCb on_listen,
+    FlEventChannelStreamHandlerCb on_cancel,
+    gpointer user_data,
+    GDestroyNotify destroy_notify) {
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  FlEventChannel* channel = fl_event_channel_new(
+      fl_plugin_registrar_get_messenger(registrar),
+      channel_name,
+      FL_METHOD_CODEC(codec));
+  fl_event_channel_set_stream_handlers(channel, on_listen, on_cancel, user_data,
+                                       destroy_notify);
+  return channel;
+}

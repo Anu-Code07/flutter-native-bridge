@@ -6,7 +6,7 @@ repository: https://github.com/Anu-Code07/flutter-native-bridge
 issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 
 workspace:
   - packages/nativeflow_bridge
@@ -23,6 +23,7 @@ workspace:
   - packages/bridge_devtools
   - examples/payment_sdk_wrapper
   - examples/ai_image_processor
+  - examples/kyc_document_capture
 
 melos:
   scripts:

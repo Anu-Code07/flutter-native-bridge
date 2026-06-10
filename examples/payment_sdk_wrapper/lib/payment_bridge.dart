@@ -28,52 +28,33 @@ final class PaymentRequest {
   final Map<String, Object?> metadata;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'amountMinor': amountMinor,
-        'currency': currency,
-        'orderId': orderId,
-        'metadata': metadata,
-      };
+    'amountMinor': amountMinor,
+    'currency': currency,
+    'orderId': orderId,
+    'metadata': metadata,
+  };
 }
 
 final class PaymentResult {
-  const PaymentResult({
-    required this.paymentId,
-    required this.status,
-  });
+  const PaymentResult({required this.paymentId, required this.status});
 
   final String paymentId;
   final PaymentStatus status;
 }
 
 final class PaymentEvent {
-  const PaymentEvent({
-    required this.type,
-    required this.message,
-  });
+  const PaymentEvent({required this.type, required this.message});
 
   final PaymentEventType type;
   final String message;
 }
 
-enum PaymentStatus {
-  authorized,
-  captured,
-  failed,
-  cancelled,
-}
+enum PaymentStatus { authorized, captured, failed, cancelled }
 
-enum PaymentEventType {
-  opened,
-  authorized,
-  failed,
-  cancelled,
-}
+enum PaymentEventType { opened, authorized, failed, cancelled }
 
 @BridgeError('payment_cancelled')
 final class PaymentCancelledException extends BridgeException {
   const PaymentCancelledException()
-      : super(
-          'The customer cancelled the payment.',
-          code: 'payment_cancelled',
-        );
+    : super('The customer cancelled the payment.', code: 'payment_cancelled');
 }

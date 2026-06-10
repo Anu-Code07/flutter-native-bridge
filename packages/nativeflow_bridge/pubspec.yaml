@@ -1,6 +1,6 @@
 name: nativeflow_bridge
 description: Type-safe Flutter-native bridge framework with code generation, runtime, platform plugins, FFI, and DevTools.
-version: 0.1.0
+version: 1.0.0
 license: MIT
 homepage: https://github.com/Anu-Code07/flutter-native-bridge
 repository: https://github.com/Anu-Code07/flutter-native-bridge
@@ -8,8 +8,8 @@ issue_tracker: https://github.com/Anu-Code07/flutter-native-bridge/issues
 documentation: https://pub.dev/documentation/nativeflow_bridge/latest/
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.0"
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 resolution: workspace
 
@@ -20,16 +20,17 @@ topics:
   - codegen
 
 dependencies:
-  # Resolves to 10.0.1 on older Flutter (meta 1.16 pin); 13.x on Flutter 3.44+ / Dart 3.12+.
-  analyzer: ">=10.0.1 <14.0.0"
+  analyzer: ">=7.0.0 <14.0.0"
   build: ^4.0.6
   flutter:
     sdk: flutter
-  meta: ">=1.16.0 <2.0.0"
+  meta: ">=1.15.0 <2.0.0"
   source_gen: ^4.2.3
 
 dev_dependencies:
   build_test: ^3.2.1
+  flutter_test:
+    sdk: flutter
   test: ^1.25.15
 
 flutter:

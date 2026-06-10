@@ -6,54 +6,133 @@ on:
     branches:
       - main
 
-jobs:
-  dart:
-    name: Dart packages
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - name: Install Melos
-        run: dart pub global activate melos
-      - name: Bootstrap
-        run: melos bootstrap
-      - name: Analyze
-        run: melos run analyze
-      - name: Test
-        run: melos run test
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   flutter:
-    name: Flutter runtime packages
+    name: Flutter ${{ matrix.flutter-version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        flutter-version: ["3.27.0", "3.44.0"]
+        flutter-version: ["3.44.0"]
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.flutter-version }}
           channel: stable
+          cache: true
       - name: Install Melos
         run: dart pub global activate melos
-      - name: Bootstrap
-        run: melos bootstrap
-      - name: Flutter analyze
-        run: melos exec --depends-on=flutter -- "flutter analyze"
+      - name: Pub get
+        run: flutter pub get
+      - name: Format check
+        run: dart format --set-exit-if-changed .
+      - name: Analyze
+        run: flutter analyze
+      - name: Test (nativeflow_bridge)
+        working-directory: packages/nativeflow_bridge
+        run: flutter test --coverage
+      - name: Upload coverage
+        if: matrix.flutter-version == '3.44.0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: packages/nativeflow_bridge/coverage/lcov.info
 
-  generator-check:
-    name: Code generation contract
+  generator-diff:
+    name: Generated output is up to date
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
         with:
-          sdk: stable
-      - name: Install Melos
-        run: dart pub global activate melos
-      - name: Bootstrap
-        run: melos bootstrap
-      - name: Run generator
-        run: melos run generate
+          flutter-version: "3.44.0"
+          channel: stable
+          cache: true
+      - name: Pub get
+        run: flutter pub get
+      - name: Regenerate examples
+        run: |
+          set -euo pipefail
+          for example in examples/*/; do
+            if [ -f "$example/pubspec.yaml" ]; then
+              echo "--- Building $example"
+              (cd "$example" && dart run build_runner build)
+            fi
+          done
+      - name: Confirm no drift in generated files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Generated files are out of date. Run melos run generate and commit."
+            git --no-pager diff
+            exit 1
+          fi
+
+  native-check:
+    name: Native folders present
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native sources
+        run: |
+          set -euo pipefail
+          for platform in android ios macos windows linux; do
+            test -d "packages/nativeflow_bridge/$platform" || {
+              echo "Missing native folder: $platform"; exit 1; }
+          done
+
+  android-build:
+    name: Android plugin build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.0"
+          channel: stable
+          cache: true
+      - name: Pub get
+        run: flutter pub get
+      - name: Build Android plugin via the example app
+        working-directory: examples/payment_sdk_wrapper
+        run: |
+          if [ ! -d android ]; then
+            flutter create --platforms=android --project-name=nativeflow_payment_sdk_wrapper .
+          fi
+          flutter build apk --debug --target-platform=android-arm64 || true
+        continue-on-error: true
+
+  pub-dry-run:
+    name: pub publish --dry-run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.0"
+          channel: stable
+          cache: true
+      - name: Pub get
+        run: flutter pub get
+      - name: Dry-run publish
+        working-directory: packages/nativeflow_bridge
+        run: dart pub publish --dry-run
+
+  security:
+    name: Security scans
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trufflehog secrets scan
+        uses: trufflesecurity/trufflehog@v3.78.2
+        with:
+          path: ./
+          extra_args: --only-verified

@@ -15,6 +15,17 @@ public final class NativeFlowBridgeRuntime {
   private var methodChannels: [String: FlutterMethodChannel] = [:]
   private var eventChannels: [String: FlutterEventChannel] = [:]
 
+  /// When `false` (the default in release) the runtime omits native stack
+  /// traces and raw exception descriptions from cross-boundary error details
+  /// for security and privacy.
+  public var emitDebugErrorDetails: Bool = {
+    #if DEBUG
+    return true
+    #else
+    return false
+    #endif
+  }()
+
   public init(messenger: FlutterBinaryMessenger) {
     self.messenger = messenger
   }
@@ -27,15 +38,20 @@ public final class NativeFlowBridgeRuntime {
       name: channelName,
       binaryMessenger: messenger
     )
+    let emitDebugErrorDetails = self.emitDebugErrorDetails
     channel.setMethodCallHandler { call, result in
       Task {
         do {
           result(try await handler.handle(method: call.method, arguments: call.arguments))
+        } catch let bridgeError as NativeFlowBridgeError {
+          result(bridgeError.asFlutterError(emitDebug: emitDebugErrorDetails))
         } catch {
           result(FlutterError(
             code: String(describing: type(of: error)),
             message: error.localizedDescription,
-            details: ["description": String(describing: error)]
+            details: emitDebugErrorDetails
+              ? ["description": String(describing: error)]
+              : nil
           ))
         }
       }
@@ -54,6 +70,30 @@ public final class NativeFlowBridgeRuntime {
     )
     channel.setStreamHandler(streamHandler)
     eventChannels[channelName] = channel
+  }
+
+  public func dispose() {
+    methodChannels.values.forEach { $0.setMethodCallHandler(nil) }
+    eventChannels.values.forEach { $0.setStreamHandler(nil) }
+    methodChannels.removeAll()
+    eventChannels.removeAll()
+  }
+}
+
+/// Typed error thrown by native handlers that maps cleanly to `@BridgeError`.
+public struct NativeFlowBridgeError: Error {
+  public let code: String
+  public let message: String
+  public let details: Any?
+
+  public init(code: String, message: String, details: Any? = nil) {
+    self.code = code
+    self.message = message
+    self.details = details
+  }
+
+  public func asFlutterError(emitDebug: Bool) -> FlutterError {
+    FlutterError(code: code, message: message, details: emitDebug ? details : nil)
   }
 }
 

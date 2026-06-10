@@ -1,81 +1,41 @@
-# Examples
+# Example bridges
 
-NativeFlow Bridge examples for pub.dev and the monorepo. Start with the
-patterns below, then open the linked projects for generated clients.
+Working examples live under [`examples/`](../examples). They all use the
+same `nativeflow_bridge` package the SDK publishes to pub.dev.
 
-## Use-case index
+| Folder | What it shows |
+|--------|----------------|
+| `examples/payment_sdk_wrapper` | Payment SDK wrapper (`@Bridge`, `@BridgeMethod`, `@BridgeEvent`, `@BridgeError`). Demonstrates JSON codec, event stream with replay/bufferSize, typed cancellation error. |
+| `examples/ai_image_processor` | CPU-heavy image processing via `@FFIBridge`. Demonstrates isolate-based execution and handler dispatch. |
+| `examples/kyc_document_capture` | Multi-step native flow with `Stream<KycStep>`, `@BridgeMethod(timeout:)`, and two `@BridgeError` exceptions. |
 
-| Scenario | Bridge type | Example |
-|----------|-------------|---------|
-| Payment / checkout SDK | `@Bridge` + `@BridgeEvent` | [Payment](#payment-sdk) |
-| BLE, GPS, or device telemetry | `@Bridge` + streams | [BLE](#ble--device-telemetry) |
-| On-device image / ML (C++) | `@FFIBridge` | [FFI](#ffi-image-processing) |
-| KYC / document camera flow | `@Bridge` + streams | [KYC](#kyc--document-capture) |
+## Running the generator
 
-## Payment SDK
-
-Wrap a native payment provider. Flutter calls typed methods; native pushes status events.
-
-```dart
-@Bridge(channel: 'myapp/payments', version: 1)
-abstract class PaymentBridge {
-  Future<PaymentResult> pay(PaymentRequest request);
-  @BridgeEvent(name: 'events') Stream<PaymentEvent> events();
-  Future<void> cancelPayment();
-}
+```bash
+cd examples/payment_sdk_wrapper
+dart run build_runner build
 ```
 
-- Package sample: `packages/nativeflow_bridge/example/payment_bridge_example.dart`
-- Full project: [`examples/payment_sdk_wrapper`](../examples/payment_sdk_wrapper)
+The generated `*.g.dart` files include:
 
-## BLE / device telemetry
+- `BridgeDescriptor` constants with full metadata (codec, platforms,
+  events, errors).
+- A private `_$YourBridgeClient` that implements the abstract bridge.
+- Kotlin / Swift / Windows C++ / Linux C contract strings.
+- For `@FFIBridge`: a typed handler-dispatch client + `…FfiHandler` typedef.
 
-Native SDK owns radio/hardware; Flutter subscribes to streams.
+## Inspecting bridge activity
 
-```dart
-@Bridge(channel: 'myapp/ble', version: 1)
-abstract class BleBridge {
-  Future<void> connect(String id);
-  @BridgeEvent(name: 'telemetry') Stream<DeviceTelemetry> telemetry();
-}
-```
-
-- Package sample: `packages/nativeflow_bridge/example/ble_bridge_example.dart`
-
-## FFI image processing
-
-Call into a compiled native library on a background isolate.
+Pair any example with `BridgeInspectorPanel` to see the calls flow:
 
 ```dart
-@FFIBridge(library: 'my_image_processor', symbolPrefix: 'nf_img_')
-abstract class ImageProcessorBridge {
-  Uint8List blur(Uint8List image);
+import 'package:nativeflow_bridge/devtools.dart';
+
+void showInspector(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => const Scaffold(body: BridgeInspectorPanel()),
+    ),
+  );
 }
 ```
-
-- Package sample: `packages/nativeflow_bridge/example/ffi_bridge_example.dart`
-- Full project: [`examples/ai_image_processor`](../examples/ai_image_processor)
-
-## KYC / document capture
-
-Multi-step native UI with progress events back to Flutter.
-
-```dart
-@Bridge(channel: 'myapp/kyc', version: 1)
-abstract class KycBridge {
-  Future<KycResult> start(String userId);
-  @BridgeEvent(name: 'step') Stream<KycStep> step();
-}
-```
-
-Implement `KycBridgeNativeBridge` in Kotlin/Swift using strings from your generated `.g.dart` file.
-
-## Workflow in every example
-
-1. Add `nativeflow_bridge` and `build_runner` to `pubspec.yaml`.
-2. Define an `abstract class` with `@Bridge` or `@FFIBridge`.
-3. Run `dart run build_runner build --delete-conflicting-outputs`.
-4. Use `_$YourBridgeClient()` from a repository or use case.
-5. Implement the generated native contract on Android/iOS (or FFI symbols on desktop/mobile).
-
-See [code_generation.md](code_generation.md) for generator details.
